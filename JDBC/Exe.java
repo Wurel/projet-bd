@@ -1,47 +1,60 @@
+import jdbc.*;
+
 import java.sql.*;
 import oracle.jdbc.driver.*;
+import java.util.*;
+
 // https://docs.oracle.com/javase/7/docs/api/java/sql/package-summary.html
 
+/**
+  * Classe de test
+  */
 
 public class Exe {
 
   public static void main(String[] args) {
 
+    String url = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
 
-    Connection con = connexion(new String("poraa"), new String("poraa"));
+    // MyConnexion connex = new MyConnexion(url);
 
+    Connection con = new MyConnexion(url).getConnexion();
 
-    try {
-      Statement stmt = con.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT CODE_PILOTE, NOM_PILOTE FROM PILOTE");
-    // }catch (SQLException e) {
-    //   e.printStackTrace();
+    
+
+    Requete rqt = new Requete(con);
+    System.out.println(rqt);
+    //
+    // while(true){
+    //   requete(con, pstmt);
     // }
 
-    // try {
-      while (rs.next()) {
-        System.out.println("code pilote " + rs.getInt("CODE_PILOTE") + " NOM " + rs.getString("NOM_PILOTE"));
-      }
-      // on ferme la Connection
-      con.close();
-    }catch (SQLException e) {
-      e.printStackTrace();
-    }
   }
-
-  public static Connection connexion(String login, String mdp){
-    String url = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
-    try {
-      DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-      Connection con = DriverManager.getConnection(url, login, mdp);
-      con.setAutoCommit(false);
-      return con;
-    }catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Connection;
-
-  }
-
-
 }
+
+//   /**
+//     * Autre exemple de requete
+//     * @param con Connection en cours
+//     * @param pstmt une requete a completer
+//     */
+//   public static void requete(Connection con, PreparedStatement pstmt){
+//     try {
+//       Scanner sc = new Scanner(System.in);
+//       System.out.println("Veuillez saisir le nom qui vous interessent :");
+//       String select = sc.nextLine();
+//       // System.out.println("SELECT " + select + " FROM " + table);
+//
+//       // PreparedStatement pstmt = con.prepareStatement("SELECT * FROM PILOTE WHERE NOM_PILOTE = ?");
+//       pstmt.setString(1, select);
+//       ResultSet rs = pstmt.executeQuery();
+//       while (rs.next()) {
+//         System.out.println(select + " " +rs.getInt("CODE_PILOTE"));
+//       }
+//     }catch (SQLException e){
+//       e.printStackTrace();
+//       throw new NullPointerException();
+//     }
+//     // return stmt.executeQuery("SELECT FROM ")
+//   }
+//
+// }
