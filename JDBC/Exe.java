@@ -16,14 +16,16 @@ public class Exe {
 
     String url = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
 
-    // MyConnexion connex = new MyConnexion(url);
+    MyConnexion connex = new MyConnexion(url);
 
-    Connection con = new MyConnexion(url).getConnexion();
+    Connection con = connex.getConnexion();
 
-    
+    String email = connex.getEmail();
 
-    Requete rqt = new Requete(con);
-    System.out.println(rqt);
+    EntreeSalle entre = new EntreeSalle(con , email);
+
+    // Requete rqt = new Requete(con);
+    // System.out.println(rqt);
     //
     // while(true){
     //   requete(con, pstmt);

@@ -6,6 +6,7 @@ import java.util.*;
 
 public class MyConnexion{
   private Connection con;
+  private String emailUtilisateur;
 
   /**
     * Permet de se connecter a une base de donnees
@@ -75,5 +76,9 @@ public class MyConnexion{
     */
   public Connection getConnexion(){
     return this.con;
+  }
+
+  public String getEmail(){
+    return this.emailUtilisateur;
   }
 }

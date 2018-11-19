@@ -19,7 +19,7 @@ public class Requete{
     Scanner sc = new Scanner(System.in);
 
     System.out.println("Souhaitez vous voir tous les salles d'encheres (oui/non)");
-      String reponse = sc.nextLine();
+    String reponse = sc.nextLine();
     if (reponse.equals("oui")) {
       Statement salles = con.createStatement();
       ResultSet rs = salles.executeQuery("SELECT * FROM SALLES");
