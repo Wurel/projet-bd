@@ -34,7 +34,8 @@ public class DemandeEnchere{
 
         // TODO : Vérifier que l'offre soit correcte (qu'il n'y a pas d'offre supérieure)
 
-        // TODO : Insérer l'offre dans la table
+        // TODO : Insérer l'offre dans la table:
+        
 
 
     }
