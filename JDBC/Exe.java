@@ -12,34 +12,58 @@ import java.util.*;
 
 public class Exe {
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    String url = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
+        String url = "jdbc:oracle:thin:@ensioracle1.imag.fr:1521:ensioracle1";
 
-    MyConnexion connex = new MyConnexion(url);
+        MyConnexion connex = new MyConnexion(url);
 
-    Connection con = connex.getConnexion();
+        Connection con = connex.getConnexion();
 
-    String email = connex.getEmail();
+        String email = connex.getEmail();
 
-    EntreeSalle entre = new EntreeSalle(con , email);
+        boolean entreeAutreSalle = True;
+        do {
+            EntreeSalle entre = new EntreeSalle(con , email);
 
-    Scanner sc = new Scanner(System.in);
-    System.out.println("Etes vous vendeur (oui/non)");
-    String reponse = sc.nextLine();
-    if (reponse.equals("oui")) {
-        NouvelleVente(con, entre.getCategorie());
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Etes vous vendeur (oui/non)");
+            String reponse = sc.nextLine();
+            if (reponse.equals("oui")) {
+                NouvelleVente(con, entre.getCategorie());
+            }
+
+            // PresentationProduit();
+
+            // ChoixVente();
+
+            while (true) {
+                // DemandeEnchere();
+                System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
+                String surenchere = sc.nextLine();
+                if (surenchere.equals("non")) {
+                    break;
+                }
+
+            }
+
+            // SortirSalle()
+            System.out.println("Voulez-vous entrer dans une autre salle? (oui/non) ");
+            String reponseAutreSalle = sc.nextLine();
+            entreeAutreSalle = reponseAutreSalle.equals("oui");
+
+        } while (entreeAutreSalle);
+
+
+
+        // Requete rqt = new Requete(con);
+        // System.out.println(rqt);
+        //
+        // while(true){
+        //   requete(con, pstmt);
+        // }
+
     }
-
-
-    // Requete rqt = new Requete(con);
-    // System.out.println(rqt);
-    //
-    // while(true){
-    //   requete(con, pstmt);
-    // }
-
-  }
 }
 
 //   /**
