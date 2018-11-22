@@ -24,6 +24,14 @@ public class Exe {
 
     EntreeSalle entre = new EntreeSalle(con , email);
 
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Etes vous vendeur (oui/non)");
+    String reponse = sc.nextLine();
+    if (reponse.equals("oui")) {
+        NouvelleVente(con, entre.getCategorie());
+    }
+
+
     // Requete rqt = new Requete(con);
     // System.out.println(rqt);
     //

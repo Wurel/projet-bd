@@ -60,6 +60,9 @@ public class MyConnexion{
         creationCompte.setString(2, nom);
         creationCompte.setString(3, prenom);
         creationCompte.setString(4, adressePostale);
+        creationCompte.executeQuery();
+        PreparedStatement commit = con.prepareStatement("COMMIT");
+        commit.executeQuery();
         connecte = true;
 
       }
