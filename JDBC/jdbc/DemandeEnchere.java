@@ -9,7 +9,7 @@ public class DemandeEnchere{
     private String emailAcheteur;
 
 
-    public DemandeEnchere(Connection con, String emailAcheteur, int idVente, boolean enchereMontante, boolean enchereMultiple){
+    public DemandeEnchere(Connection con, String emailAcheteur, int idVente, boolean enchereMontante, boolean enchereMultipleAutorisee){
 
         /*
          * Cette fonction effectue une demande d'enchère sur une vente.
@@ -28,13 +28,14 @@ public class DemandeEnchere{
 
             // Si les enchères multiples ne sont pas autorisées, il faut s'assurer que le client a le droit d'enchérir :
 
-            if (!enchereMultiple) {
+            if (!enchereMultipleAutorisee) {
                 PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(PRIX_ENCHERE) FROM ENCHERES WHERE emailAcheteur =? ");
                 droitEnchere.setString(1, emailAcheteur);
                 ResultSet nombreEnchere = droitEnchere.executeQuery();
 
-                if () {
-
+                if (nombreEnchere.getInt("COUNT(PRIX_ENCHERE)") == 1) {
+                    System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
+                    // TODO :  Quitter la vente.
                 }
 
             }
@@ -73,16 +74,22 @@ public class DemandeEnchere{
                 }
             }
 
-            // TODO : Insérer l'offre dans la table:
 
-            // On cherche une nouvelle clé primaire :
+            /*
+             * On rappelle que les clés primaires sont de type INT.
+             * On cherche une nouvelle clé primaire.
+             * Pour cela on va :
+             *      - chercher la plus grande clé primaire
+             *      - ajouter 1
+             */
             PreparedStatement clesPrimairesExistantes = con.prepareStatement("SELECT MAX(ID_ENCHERE) FROM ENCHERES");
             ResultSet cleMax = clesPrimairesExistantes.executeQuery();
             int clePrimaire = cleMax.getInt("id_enchere") + 1;
 
             // On insère l'offre :
-            PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERES VALUES (=?, =?) ");
-            enchere.setInt(1, clePrimaire + 1);
+            PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERES VALUES (=?, =?, =?, =?) ");
+            // TODO : Insérer les attributs dans le bon sens :
+            enchere.setInt(1, clePrimaire);
             enchere.setInt(2, prixOffre);
             enchere.setString(3, emailUtilisateur);
             enchere.setInt(4, idVente);
