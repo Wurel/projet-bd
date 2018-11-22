@@ -32,6 +32,7 @@ public class EntreeSalle{
         this.categorie.toLowerCase();
         salle.setString(1, this.categorie);
         ResultSet rs = salles.executeQuery();
+        // Est ce que ca marche
         while (!sc.hasNextInt()) sc.next();
         numSalle = sc.nextInt();
         while (rs.next()) {
