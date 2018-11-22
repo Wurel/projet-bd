@@ -24,11 +24,11 @@ public class NouvelleVente{
       if (reponse.equals("non")) {
           Statement salleMax = con.createStatement("SELECT MAX(id_salle) FROM SALLE ");
           ResultSet getMax = salleMax.executeQuery();
-          rs.next();
-          int max = rs.getInt("id_salle");
+          getMax.next();
+          int max = getMax.getInt("id_salle");
           PreparedStatement nouvelleSalle;
           PreparedStatement salles;
-          ResultSet rs
+          ResultSet rs;
           System.out.println("Souhaitez vous que la vente soit descendante (oui/non)");
           reponse = sc.nextLine();
           if (reponse.equals("oui")) {
@@ -120,16 +120,31 @@ public class NouvelleVente{
       int stock = sc.nextInt();
       PreparedStatement produit = con.prepareStatement("INSERT INTO PRODUIT VALUES (id_produit=?, nom_produit=?, prix_revient_produit=?, stock_produit=?, nom_categorie=?, id_salle=?)");
 
+      System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
+      System.out.println("Entrez le prix de depart");
+      // Est ce que ca marche
+      while (!sc.hasNextInt()) sc.next();
+      int prixDepart = sc.nextInt();
+
+      Statement venteMax = con.createStatement("SELECT MAX(id_vente) FROM PRODUIT ");
+      getMax = venteMax.executeQuery();
+      getMax.next();
+      max = getMax.getInt("id_vente");
+      PreparedStatement vente = con.prepareStatement("INSERT INTO VENTE VALUES (id_vente=?, prix_depart_vente=?, id_salle=?)");
+      vente.setInt(1, max);
+      vente.setInt(2, prix_depart_vente);
+      vente.setInt(3, )
+
       Statement prodMax = con.createStatement("SELECT MAX(id_produit) FROM PRODUIT ");
       getMax = prodMax.executeQuery();
-      rs.next();
-      max = rs.getInt("id_produit");
+      getMax.next();
+      max = getMax.getInt("id_produit");
       produit.setInt(1, max);
       produit.setString(2, nomProduit);
       produit.setInt(3, prixRevient);
       produit.setInt(4, stock);
       produit.setString(5, categorie);
-      salles = con.prepareStatement("SELECT * FROM SALLE as S WHERE S.nom_categorie=? !!!!! et tout le reste nul !!!!");
+      salles = con.prepareStatement("SELECT * FROM SALLE as S WHERE S.nom_categorie=? !!!!! et les ventes de types classiques !!!!");
       salles.setString(1, categorie);
       rs = salles.executeQuery();
       produit.setInt(6, rs.getInt("id_salle"));
@@ -148,6 +163,13 @@ public class NouvelleVente{
       if(estLimitee){
         produit.setInt(6, idSalleLimitee);
         produit.executeQuery();
+
+
+        //  ATTENTION JE SAIS PAS GERER LES DATES ENCORE
+
+
+        System.out.println("Entrez la date de depart ");
+        System.out.println("Entrez la date de fin ");
       }
 
       if (estRevocable) {
@@ -155,14 +177,7 @@ public class NouvelleVente{
         produit.executeQuery();
       }
 
-      System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
-      System.out.println("Entrez le prix de depart");
-      // Est ce que ca marche
-      while (!sc.hasNextInt()) sc.next();
-      int prixDepart = sc.nextInt();
-      if (estLimitee) {
-        
-      }
+
 
       PreparedStatement commit = con.prepareStatement("COMMIT");
       commit.executeQuery();
