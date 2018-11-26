@@ -27,11 +27,12 @@ public class DemandeEnchere{
                 autorisation = True;
             }
             else {
-                PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(PRIX_ENCHERE) FROM ENCHERES WHERE emailAcheteur =? ");
+                PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE_PROPOSEE WHERE email_utilisateur =? AND id_vente =?");
                 droitEnchere.setString(1, emailAcheteur);
+                droitEnchere.setString(2, idVente);
                 ResultSet nombreEnchere = droitEnchere.executeQuery();
 
-                if (nombreEnchere.getInt("COUNT(PRIX_ENCHERE)") == 0) {
+                if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
 
                     // 2nd cas :
                     autorisation = True;
@@ -42,11 +43,12 @@ public class DemandeEnchere{
             }
         }
         else{
-            PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(PRIX_ENCHERE) FROM ENCHERES WHERE id_vente =? ");
+            // Si l'enchere est descendante
+            PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE_PROPOSEE WHERE id_vente =? ");
                 droitEnchere.setInt(1, idVente);
                 ResultSet nombreEnchere = droitEnchere.executeQuery();
 
-                if (nombreEnchere.getInt("COUNT(PRIX_ENCHERE)") == 0) {
+                if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
 
                     // 3ème cas :
                     autorisation = True;
@@ -69,19 +71,34 @@ public class DemandeEnchere{
          *      - ajouter 1
          */
 
-        PreparedStatement clesPrimairesExistantes = con.prepareStatement("SELECT MAX(ID_ENCHERE) FROM ENCHERES");
-        ResultSet cleMax = clesPrimairesExistantes.executeQuery();
-        int clePrimaire = cleMax.getInt("id_enchere") + 1;
+        PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE");
+        ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
+        int clePrimaireEnchere = cleMax.getInt("num_enchere") + 1;
+
+        PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE");
+        ResultSet cleMax = clesPrimairesExistantesTableEnchereProposee.executeQuery();
+        int clePrimaireEnchereProposee = cleMax.getInt("num_enchere") + 1;
 
         // On insère l'offre :
-        PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERES VALUES (=?, =?, =?, =?) ");
+        PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
         // TODO : Insérer les attributs dans le bon sens :
-        enchere.setInt(1, clePrimaire);
+        enchere.setInt(1, clePrimaireEnchere);
         enchere.setInt(2, prixAchat);
-        enchere.setString(3, emailUtilisateur);
-        enchere.setInt(4, idVente);
+        enchere.setString(3, date);
+        enchere.setString(4, heure);
+        enchere.setInt(5, 1);
 
-        ResultSet rs = salle.executeQuery();
+        ResultSet rs = enchere.executeQuery();
+        PreparedStatement commit = con.prepareStatement("COMMIT");
+        commit.executeQuery();
+
+        PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
+        // TODO : Insérer les attributs dans le bon sens :
+        enchere.setInt(1, clePrimaireEnchereProposee);
+        enchere.setInt(2, idVente);
+        enchere.setString(3, emailAcheteur);
+
+        ResultSet rs = enchereProposee.executeQuery();
         PreparedStatement commit = con.prepareStatement("COMMIT");
         commit.executeQuery();
 
