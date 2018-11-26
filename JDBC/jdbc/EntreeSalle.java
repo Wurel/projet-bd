@@ -7,6 +7,7 @@ import java.util.*;
 public class EntreeSalle{
   private Connection con;
   private String categorie;
+  private int numSalle;
 
   public EntreeSalle(Connection con, String emailUtilisateur){
     try {
@@ -30,7 +31,7 @@ public class EntreeSalle{
         System.out.println("Veuillez choisir la salle d'enchere :");
         PreparedStatement salles = con.prepareStatement("SELECT * FROM SALLE WHERE nom_categorie=?");
         this.categorie.toLowerCase();
-        salle.setString(1, this.categorie);
+        salles.setString(1, this.categorie);
         ResultSet rs = salles.executeQuery();
         // Est ce que ca marche
         while (!sc.hasNextInt()) sc.next();
@@ -47,7 +48,7 @@ public class EntreeSalle{
       ResultSet rs = salle.executeQuery();
       PreparedStatement commit = con.prepareStatement("COMMIT");
       commit.executeQuery();
-      return numSalle;
+      this.numSalle = numSalle;
     }catch (SQLException e){
       e.printStackTrace();
       throw new NullPointerException();
@@ -56,6 +57,10 @@ public class EntreeSalle{
 
   public String getCategorie(){
     return this.categorie;
+  }
+
+  public int getSalle(){
+    return this.numSalle;
   }
 
 

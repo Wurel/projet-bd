@@ -1,15 +1,22 @@
 create table UTILISATEUR (
-  email_utilisateur character varying(30) not null,
+  email_utilisateur character varying(50) not null,
   nom_utilisateur character varying(30),
   prenom_utilisateur character varying(30),
-  adresse_postale_utilisateur character varying(30),
+  adresse_postale_utilisateur character varying(50),
   primary key (email_utilisateur)
+);
+
+create table CATEGORIE (
+  nom_categorie character varying(30) not null,
+  description_categorie character varying(60),
+  primary key (nom_categorie)
 );
 
 create table SALLE (
   id_salle int not null,
   nom_categorie character varying(30) not null,
-  primary key (id_salle)
+  primary key (id_salle),
+  foreign key (nom_categorie) references CATEGORIE(nom_categorie)
 );
 
 create table PRODUIT (
@@ -19,14 +26,23 @@ create table PRODUIT (
   stock_produit int check(stock_produit > 0),
   nom_categorie character varying(30) not null,
   id_salle int not null,
-  primary key (id_produit)
+  primary key (id_produit),
+  foreign key (nom_categorie) references CATEGORIE(nom_categorie),
+  foreign key (id_salle) references SALLE(id_salle)
+);
+
+create table CARACTERISTIQUE (
+  nom_caracteristique character varying(30) not null,
+  description_caracteristique character varying(60),
+  id_produit int not null,
+  primary key (nom_caracteristique),
+  foreign key (id_produit) references PRODUIT(id_produit)
 );
 
 create table ENCHERE (
   num_enchere int not null,
   prix_enchere int check(prix_enchere > 0),
-  date_enchere date,
-  heure_enchere time,
+  date_enchere timestamp,
   quantite int check(quantite > 0),
   primary key (num_enchere)
 );
@@ -35,26 +51,15 @@ create table VENTE (
   id_vente int not null,
   prix_depart_vente int check (prix_depart_vente > 0),
   id_salle int not null,
-  unicite_enchere character varying(30) check (unicite_enchere in ('unique', 'plusieurs')) default 'plusieurs',
-  sens_vente character varying(30) check (sens_vente in ('descendante', 'montante')) default 'montante',
-  annulation_vente character varying(30) check (annulation_vente in ('revocable', 'non_revocable')) default 'non_revocable',
-  duree_vente character varying(30) check (duree_vente in ('limitee', 'non_limitee')) default 'non_limitee',
-  date_fin date null check((duree_vente = 'non_limitee' AND date_fin = null) OR (duree_vente = 'limitee' AND date_fin != null)),
-  heure_fin time null check((duree_vente = 'non_limitee' AND heure_fin = null) OR (duree_vente = 'limitee' AND heure_fin != null)),
-  primary key (id_vente)
-);
-
-create table CATEGORIE (
-  nom_categorie character varying(30) not null,
-  description_categorie character varying(30),
-  primary key (nom_categorie)
-);
-
-create table CARACTERISTIQUE (
-  nom_caracteristique character varying(30) not null,
-  description_caracteristique character varying(30),
-  id_produit int not null,
-  primary key (nom_caracteristique)
+  unicite_enchere character varying(30) default 'plusieurs',
+  sens_vente character varying(30) default 'montante',
+  annulation_vente character varying(30) default 'non_revocable',
+  duree_vente character varying(30) default 'non_limitee',
+  date_fin timestamp null,
+  primary key (id_vente),
+  foreign key (id_salle) references SALLE(id_salle),
+  constraint CHK_Typ check (unicite_enchere in ('unique', 'plusieurs') and sens_vente in ('descendante', 'montante') and annulation_vente in ('revocable', 'non_revocable') and duree_vente in ('limitee', 'non_limitee')),
+  constraint CHK_Date check ((duree_vente = 'non_limitee' AND date_fin = null) OR (duree_vente = 'limitee' AND date_fin != null))
 );
 
 -- create table UNIQUE (
@@ -86,28 +91,39 @@ create table CARACTERISTIQUE (
 create table RENTRE_DANS (
   email_utilisateur character varying(30) not null,
   id_salle int not null,
-  primary key (email_utilisateur, id_salle) references UTILISATEUR(email_utilisateur), SALLE(id_salle)
+  primary key (email_utilisateur, id_salle),
+  foreign key (email_utilisateur) references UTILISATEUR(email_utilisateur),
+  foreign key (id_salle) references SALLE(id_salle)
 );
 
 create table PRODUIT_SOUMIS_A_LA_VENTE (
   id_produit int not null,
   id_vente int not null,
   email_utilisateur character varying(30) not null,
-  primary key (id_produit, id_vente, email_utilisateur) references PRODUIT(id_produit), VENTE(id_vente), UTILISATEUR(email_utilisateur)
+  primary key (id_produit, id_vente, email_utilisateur),
+  foreign key (id_produit) references PRODUIT(id_produit),
+  foreign key (id_vente) references VENTE(id_vente),
+  foreign key (email_utilisateur) references UTILISATEUR(email_utilisateur)
 );
 
 create table ENCHERE_PROPOSEE (
   num_enchere int not null,
   id_vente int not null,
   email_utilisateur character varying(30) not null,
-  primary key (num_enchere, id_vente, email_utilisateur) references ENCHERE(num_enchere), VENTE(id_vente), UTILISATEUR(email_utilisateur)
+  primary key (num_enchere, id_vente, email_utilisateur),
+  foreign key (num_enchere) references ENCHERE(num_enchere),
+  foreign key (id_vente) references VENTE(id_vente),
+  foreign key (email_utilisateur) references UTILISATEUR(email_utilisateur)
 );
 
 create table SALLE_DE_VENTE_CREEE (
   id_salle int not null,
   id_produit int not null,
   id_vente int not null,
-  primary key (id_salle, id_produit, id_vente) references SALLE(id_salle), PRODUIT(id_produit), VENTE(id_vente)
+  primary key (id_salle, id_produit, id_vente),
+  foreign key (id_salle) references SALLE(id_salle),
+  foreign key (id_produit) references PRODUIT(id_produit),
+  foreign key (id_vente) references VENTE(id_vente)
 );
 
 -- create table ENCHERE_UNIQUE_PROPOSEE (
