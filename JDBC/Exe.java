@@ -25,7 +25,7 @@ public class Exe {
         boolean entreeAutreSalle = true;
         do {
             EntreeSalle entre = new EntreeSalle(con , email);
-
+            int salleCourante = entre.getSalle();
             Scanner sc = new Scanner(System.in);
             System.out.println("Etes vous vendeur (oui/non)");
             String reponse = sc.nextLine();
@@ -33,7 +33,7 @@ public class Exe {
                 new NouvelleVente(con, entre.getCategorie());
             }
 
-            // PresentationProduit();
+            PresentationProduit(con, salleCourante);
 
             // ChoixVente();
 
