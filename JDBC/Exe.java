@@ -22,7 +22,7 @@ public class Exe {
 
         String email = connex.getEmail();
 
-        boolean entreeAutreSalle = True;
+        boolean entreeAutreSalle = true;
         do {
             EntreeSalle entre = new EntreeSalle(con , email);
 
@@ -30,7 +30,7 @@ public class Exe {
             System.out.println("Etes vous vendeur (oui/non)");
             String reponse = sc.nextLine();
             if (reponse.equals("oui")) {
-                NouvelleVente(con, entre.getCategorie());
+                new NouvelleVente(con, entre.getCategorie());
             }
 
             // PresentationProduit();
