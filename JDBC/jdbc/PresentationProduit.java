@@ -20,10 +20,9 @@ public class PresentationProduit{
           }
         }
 
-        }
       }catch (SQLException e){
         e.printStackTrace();
         throw new NullPointerException();
       }
-
+    }
 }

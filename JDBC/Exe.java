@@ -33,7 +33,7 @@ public class Exe {
                 new NouvelleVente(con, entre.getCategorie());
             }
 
-            PresentationProduit(con, salleCourante);
+            new PresentationProduit(con, salleCourante);
 
             // ChoixVente();
 
