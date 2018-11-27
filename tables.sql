@@ -1,3 +1,6 @@
+begin
+create database baie_electronique;
+
 create table UTILISATEUR (
   email_utilisateur character varying(50) not null,
   nom_utilisateur character varying(30),
@@ -35,16 +38,20 @@ create table CARACTERISTIQUE (
   nom_caracteristique character varying(30) not null,
   description_caracteristique character varying(60),
   id_produit int not null,
-  primary key (nom_caracteristique),
+  primary key (nom_caracteristique, id_produit), -- l'id produit est dans la clé
   foreign key (id_produit) references PRODUIT(id_produit)
 );
 
+-- alter table CARACTERISTIQUE drop primary key;
+-- alter table CARACTERISTIQUE add primary key (nom_caracteristique, id_produit);
+
 create table ENCHERE (
   num_enchere int not null,
-  prix_enchere int check(prix_enchere > 0),
+  prix_enchere int,
   date_enchere timestamp,
-  quantite int check(quantite > 0),
-  primary key (num_enchere)
+  quantite int,
+  primary key (num_enchere),
+  constraint CHK_Valid check (prix_enchere > 0 and quantite > 0)
 );
 
 create table VENTE (
@@ -126,9 +133,14 @@ create table SALLE_DE_VENTE_CREEE (
   foreign key (id_vente) references VENTE(id_vente)
 );
 
+end;
+/
 -- create table ENCHERE_UNIQUE_PROPOSEE (
 --   num_enchere int not null,
 --   id_vente int not null,
 --   email_utilisateur character varying(30) not null,
 --   primary key (num_enchere, id_vente, email_utilisateur) references ENCHERE(num_enchere), VENTE(id_vente), UTILISATEUR(email_utilisateur)
 -- );
+
+-- l'application java gère l'unicité des types de ventes présentes dans chaque salle
+-- ajouter une constraint pour qu'une enchère soit valide, ie quantité <= stock_produit and prix_enchere >= prix_depart_vente
