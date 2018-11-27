@@ -31,7 +31,7 @@ public class MyConnexion{
       if (reponse.equals("oui")) {
         System.out.println("Inserez votre mail");
         String mail = sc.nextLine();
-        PreparedStatement email = con.prepareStatement("SELECT email_utilisateur FROM UTILISATEUR WHERE email_utilisateur =? ");
+        PreparedStatement email = con.prepareStatement("SELECT email_utilisateur FROM UTILISATEUR WHERE email_utilisateur =?");
         email.setString(1, reponse);
         ResultSet rs = email.executeQuery();
         if (rs.next()) {

@@ -25,13 +25,14 @@ create table SALLE (
 create table PRODUIT (
   id_produit int not null,
   nom_produit character varying(30),
-  prix_revient_produit int check(prix_revient_produit >= 0),
-  stock_produit int check(stock_produit > 0),
+  prix_revient_produit int,
+  stock_produit int,
   nom_categorie character varying(30) not null,
   id_salle int not null,
   primary key (id_produit),
   foreign key (nom_categorie) references CATEGORIE(nom_categorie),
-  foreign key (id_salle) references SALLE(id_salle)
+  foreign key (id_salle) references SALLE(id_salle),
+  constraint CHK_Prod check (prix_revient_produit >= 0 and stock_produit > 0)
 );
 
 create table CARACTERISTIQUE (
@@ -51,7 +52,7 @@ create table ENCHERE (
   date_enchere timestamp,
   quantite int,
   primary key (num_enchere),
-  constraint CHK_Valid check (prix_enchere > 0 and quantite > 0)
+  constraint CHK_Ench check (prix_enchere > 0 and quantite > 0)
 );
 
 create table VENTE (
@@ -144,3 +145,6 @@ end;
 
 -- l'application java gère l'unicité des types de ventes présentes dans chaque salle
 -- ajouter une constraint pour qu'une enchère soit valide, ie quantité <= stock_produit and prix_enchere >= prix_depart_vente
+
+-- dans la relation enchere : rajouter l'id_vente
+-- dans la relation vente : rajouter l'id salle
