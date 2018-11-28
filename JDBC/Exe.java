@@ -38,6 +38,11 @@ public class Exe {
 
             // ChoixVente();
 
+            // On doit renseigner ces infos pour faire la fonction DemandeEnchere :
+            // int idVente = ;
+            // boolean enchereMontante = ;
+            // boolean enchereMultipleAutorisee = ;
+
             while (true) {
                 // DemandeEnchere(con, emailUtilisateur);
                 System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
@@ -45,6 +50,7 @@ public class Exe {
                 if (surenchere.equals("non")) {
                     break;
                 }
+                // DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
 
             }
 
