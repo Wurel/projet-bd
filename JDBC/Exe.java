@@ -34,12 +34,12 @@ public class Exe {
                 new NouvelleVente(con, entre.getCategorie(), email);
             }
             int salleCourante = entre.getSalle();
-            // new PresentationProduit(con, salleCourante);
+            new PresentationProduit(con, salleCourante);
 
             // ChoixVente();
 
             while (true) {
-                // DemandeEnchere();
+                // DemandeEnchere(con, emailUtilisateur);
                 System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
                 String surenchere = sc.nextLine();
                 if (surenchere.equals("non")) {
@@ -48,7 +48,7 @@ public class Exe {
 
             }
 
-            // SortirSalle()
+            new SortirSalle(con, email, salleCourante);
             System.out.println("Voulez-vous entrer dans une autre salle? (oui/non) ");
             String reponseAutreSalle = sc.nextLine();
             entreeAutreSalle = reponseAutreSalle.equals("oui");
