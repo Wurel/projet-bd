@@ -15,10 +15,12 @@ public class EntreeSalle{
       System.out.println("Souhaitez vous voir toutes les categories (oui/non)");
       String reponse = sc.nextLine();
       if (reponse.equals("oui")) {
+        System.out.println("Ok je vous montre ca");
         Statement salles = con.createStatement();
-        ResultSet rs = salles.executeQuery("SELECT DISTINCT nom_categorie FROM SALLE");
+        ResultSet rs = salles.executeQuery("SELECT * FROM CATEGORIE");
         while (rs.next()) {
-          System.out.println("Id Salle : " + rs.getInt("id_salle") + " Categorie : " + rs.getString("nom_categorie"));
+          System.out.println("Je passe la");
+          System.out.println(rs.getString("NOM_CATEGORIE") + " " + rs.getString("DESCRIPTION_CATEGORIE"));
         }
       }
       System.out.println("Veuillez choisir la categorie de produit :");
@@ -28,21 +30,25 @@ public class EntreeSalle{
       boolean salleExiste = new Boolean(false);
       int numSalle = -1;
       while(!salleExiste){
-        System.out.println("Veuillez choisir la salle d'enchere :");
         PreparedStatement salles = con.prepareStatement("SELECT * FROM SALLE WHERE nom_categorie=?");
         this.categorie.toLowerCase();
         salles.setString(1, this.categorie);
         ResultSet rs = salles.executeQuery();
         // Est ce que ca marche
-        while (!sc.hasNextInt()) sc.next();
+        // while (!sc.hasNextInt()) sc.next();
+        while (rs.next()) {
+          System.out.println(rs.getInt("id_salle") + " " + rs.getString("NOM_CATEGORIE"));
+        }
+        System.out.println("Veuillez choisir la salle d'enchere :");
         numSalle = sc.nextInt();
+        rs = salles.executeQuery();
         while (rs.next()) {
           if(rs.getInt("id_salle") == numSalle){
             salleExiste = true;
           }
         }
       }
-      PreparedStatement salle = con.prepareStatement("INSERT INTO RENTRE_DANS VALUES (=?, =?) ");
+      PreparedStatement salle = con.prepareStatement("INSERT INTO RENTRE_DANS VALUES (?, ?) ");
       salle.setString(1, emailUtilisateur);
       salle.setInt(2, numSalle);
       ResultSet rs = salle.executeQuery();

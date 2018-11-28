@@ -31,9 +31,9 @@ public class MyConnexion{
       if (reponse.equals("oui")) {
         System.out.println("Inserez votre mail");
         String mail = sc.nextLine();
-        PreparedStatement email = con.prepareStatement("SELECT email_utilisateur FROM UTILISATEUR WHERE email_utilisateur =? ");
-        email.setString(1, reponse);
-        ResultSet rs = email.executeQuery();
+        Statement email = con.createStatement();
+        ResultSet rs = email.executeQuery("SELECT email_utilisateur FROM UTILISATEUR WHERE email_utilisateur = '" + mail + "'");
+        this.emailUtilisateur = mail;
         if (rs.next()) {
           System.out.println("Connecte");
           connecte = true;
@@ -55,7 +55,7 @@ public class MyConnexion{
         System.out.println("Inserez votre Adresse Postale");
         String adressePostale = sc.nextLine();
 
-        PreparedStatement creationCompte = con.prepareStatement("INSERT INTO UTILISATEUR VALUES (=?, =?, =?, =?)");
+        PreparedStatement creationCompte = con.prepareStatement("INSERT INTO UTILISATEUR VALUES (?, ?, ?, ?)");
         creationCompte.setString(1, mail);
         creationCompte.setString(2, nom);
         creationCompte.setString(3, prenom);

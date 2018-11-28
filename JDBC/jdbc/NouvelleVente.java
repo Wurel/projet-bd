@@ -7,7 +7,7 @@ import java.util.*;
 public class NouvelleVente{
   private Connection con;
 
-  public NouvelleVente(Connection con, String categorie){
+  public NouvelleVente(Connection con, String categorie, String email){
     try{
       Scanner sc = new Scanner(System.in);
       System.out.println("La vente sera par defaut de type montante, non nevocable, sans limite de temps, enchere multiple. Souhaitez vous creer ce type de vente (oui/non)");
@@ -71,7 +71,7 @@ public class NouvelleVente{
       Statement prodMax = con.createStatement();
       getMax = prodMax.executeQuery("SELECT MAX(id_produit) FROM PRODUIT ");
       getMax.next();
-      max = getMax.getInt("id_produit");
+      int idProduit = getMax.getInt("id_produit");
       produit.setInt(1, max);
       produit.setString(2, nomProduit);
       produit.setInt(3, prixRevient);
@@ -89,12 +89,22 @@ public class NouvelleVente{
       Statement venteMax = con.createStatement();
       getMax = venteMax.executeQuery("SELECT MAX(id_vente) FROM PRODUIT ");
       getMax.next();
-      max = getMax.getInt("id_vente");
+      int idVente = getMax.getInt("id_vente");
       PreparedStatement vente = con.prepareStatement("INSERT INTO VENTE VALUES (id_vente=?, prix_depart_vente=?, id_salle=?)");
-      vente.setInt(1, max);
+      vente.setInt(1, idVente);
       vente.setInt(2, prixDepart);
       vente.setInt(3, idSalle);
       vente.executeQuery();
+
+      PreparedStatement prodSoumisVente = con.prepareStatement("INSERT INTO PRODUIT_SOUMIS_A_LA_VENTE VALUES(id_produit=?, id_vente=?, email_utilisateur=?)");
+      prodSoumisVente.setInt(1, idProduit);
+      prodSoumisVente.setInt(2, idVente);
+      prodSoumisVente.setString(3, email);
+
+      PreparedStatement salleVenteCree = con.prepareStatement("INSERT INT SALLE_DE_VENTE_CREEE VALUES (id_salle=?, id_produit=?, id_vente=?)");
+      prodSoumisVente.setInt(1, idSalle);
+      prodSoumisVente.setInt(2, idProduit);
+      prodSoumisVente.setInt(3, idVente);
 
 
       if (estDescendante) {

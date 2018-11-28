@@ -21,19 +21,20 @@ public class Exe {
         Connection con = connex.getConnexion();
 
         String email = connex.getEmail();
+        System.out.println(email);
 
         boolean entreeAutreSalle = true;
         do {
             EntreeSalle entre = new EntreeSalle(con , email);
-            int salleCourante = entre.getSalle();
+
             Scanner sc = new Scanner(System.in);
             System.out.println("Etes vous vendeur (oui/non)");
             String reponse = sc.nextLine();
             if (reponse.equals("oui")) {
-                new NouvelleVente(con, entre.getCategorie());
+                new NouvelleVente(con, entre.getCategorie(), email);
             }
-
-            new PresentationProduit(con, salleCourante);
+            int salleCourante = entre.getSalle();
+            // new PresentationProduit(con, salleCourante);
 
             // ChoixVente();
 
