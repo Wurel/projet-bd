@@ -21,7 +21,6 @@ public class Exe {
         Connection con = connex.getConnexion();
 
         String email = connex.getEmail();
-        System.out.println(email);
 
         boolean entreeAutreSalle = true;
         do {
@@ -36,10 +35,10 @@ public class Exe {
             int salleCourante = entre.getSalle();
             new PresentationProduit(con, salleCourante);
 
-            // ChoixVente();
+            ChoixVente vente = new ChoixVente(con, salleCourante);
 
             // On doit renseigner ces infos pour faire la fonction DemandeEnchere :
-            // int idVente = ;
+            int idVente = vente.getIdVente();
             // boolean enchereMontante = ;
             // boolean enchereMultipleAutorisee = ;
 
@@ -61,7 +60,7 @@ public class Exe {
 
         } while (entreeAutreSalle);
 
-
+        System.out.println("Merci de votre visite !");
 
         // Requete rqt = new Requete(con);
         // System.out.println(rqt);

@@ -15,11 +15,9 @@ public class EntreeSalle{
       System.out.println("Souhaitez vous voir toutes les categories (oui/non)");
       String reponse = sc.nextLine();
       if (reponse.equals("oui")) {
-        System.out.println("Ok je vous montre ca");
         Statement salles = con.createStatement();
         ResultSet rs = salles.executeQuery("SELECT * FROM CATEGORIE");
         while (rs.next()) {
-          System.out.println("Je passe la");
           System.out.println(rs.getString("NOM_CATEGORIE") + " " + rs.getString("DESCRIPTION_CATEGORIE"));
         }
       }
