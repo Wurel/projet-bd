@@ -81,7 +81,7 @@ public class DemandeEnchere{
 
         // On insère l'offre :
         PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
-        // TODO : Insérer les attributs dans le bon sens :
+        // On insère les attributs dans le bon sens :
         enchere.setInt(1, clePrimaireEnchere);
         enchere.setInt(2, prixAchat);
         enchere.setString(3, date);
@@ -93,7 +93,7 @@ public class DemandeEnchere{
         commit.executeQuery();
 
         PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
-        // TODO : Insérer les attributs dans le bon sens :
+        // On insère les attributs dans le bon sens :
         enchere.setInt(1, clePrimaireEnchereProposee);
         enchere.setInt(2, idVente);
         enchere.setString(3, emailAcheteur);
@@ -106,7 +106,7 @@ public class DemandeEnchere{
     }
 
 
-    public DemandeEnchere(Connection con, String emailAcheteur, int idVente, boolean enchereMontante, boolean enchereMultipleAutorisee){
+    public void DemandeEnchere(Connection con, String emailAcheteur, int idVente, boolean enchereMontante, boolean enchereMultipleAutorisee){
 
         /*
          * Cette fonction effectue une demande d'enchère sur une vente.
@@ -161,15 +161,25 @@ public class DemandeEnchere{
 
             // On traite maintenant le cas des enchères descendantes :
             else {
-                // TODO : On récupère le prix actuel
+
+                // TODO : On récupère le prix actuel :
                 int prixAchat;
+
+                PreparedStatement prixEncheres = con.prepareStatement("SELECT prix_depart_vente FROM VENTE WHERE id_vente =? ");
+                prixEncheres.setInt(1, idVente);
+                ResultSet rs = prixEncheres.executeQuery();
 
                 System.out.println("Le prix actuel est : ");
                 System.out.println(prixAchat);
                 System.out.println("Voulez-vous acheter cet article à ce prix là? (oui/non)");
                 String reponse = sc.nextLine();
+
                 if (reponse.equals("oui")) {
                     FaireEnchere(emailAcheteur, idVente, prixAchat);
+                }
+
+                else {
+                    System.out.println("Le prix va continuer de descendre jusqu'à ce que quelqu'un achète cette vente. Ne passez pas à côté!");
                 }
 
             }
