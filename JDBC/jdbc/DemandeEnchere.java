@@ -19,12 +19,12 @@ public class DemandeEnchere{
          *      - descendante, aucune enchère sur l'offre
          */
 
-        boolean autorisation = False;
+        boolean autorisation = false;
         if (enchereMontante) {
             if (enchereMultipleAutorisee) {
 
                 // 1er cas :
-                autorisation = True;
+                autorisation = true;
             }
             else {
                 PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE_PROPOSEE WHERE email_utilisateur =? AND id_vente =?");
@@ -35,7 +35,7 @@ public class DemandeEnchere{
                 if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
 
                     // 2nd cas :
-                    autorisation = True;
+                    autorisation = true;
                 }
                 else{
                     System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
@@ -51,7 +51,7 @@ public class DemandeEnchere{
                 if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
 
                     // 3ème cas :
-                    autorisation = True;
+                    autorisation = true;
                 }
                 else{
                     System.out.println("Désolé, quelqu'un a déjà enchéri sur cette vente.");
@@ -122,8 +122,8 @@ public class DemandeEnchere{
             // On va donc séparer les 2 processus :
 
             if (enchereMontante) {
-                boolean nombreCorrect = False;
-                boolean enchereSuffisante = False;
+                boolean nombreCorrect = false;
+                boolean enchereSuffisante = false;
 
                 while (!enchereSuffisante){
                     while (!nombreCorrect) {
@@ -131,12 +131,12 @@ public class DemandeEnchere{
                         // L'utilisateur saisit un nombre et on vérifie qu'il est correct :
                         System.out.println("Veuillez saisir votre offre pour ce produit : ");
                         String offre = sc.nextLine();
-                        nombreCorrect = True;
+                        nombreCorrect = true;
                         try{
                             int prixAchat = Integer.parseInt(offre);
                         } catch (Exception e) {
                             System.out.println("ERREUR : Vous avez saisi un nombre incorrect!");
-                            nombreCorrect = False;
+                            nombreCorrect = false;
                         }
                     }
                     // On vérifie maintenant que l'offre est suffisante :
