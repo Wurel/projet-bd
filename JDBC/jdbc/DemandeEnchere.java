@@ -30,24 +30,23 @@ public class DemandeEnchere{
             else {
 
                 try {
-
                     PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE_PROPOSEE WHERE email_utilisateur =? AND id_vente =?");
                     droitEnchere.setString(1, emailAcheteur);
                     String idVenteString = "";
                     droitEnchere.setString(2, idVenteString.valueOf(idVente));
                     ResultSet nombreEnchere = droitEnchere.executeQuery();
 
+                    if (nombreEnchere.getInt("count") == 0) {
+                        // 2nd cas :
+                        autorisation = true;
+                    }
+
+                    else{
+                        System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     throw new NullPointerException();
-                }
-                if (nombreEnchere.getInt("count") == 0) {
-
-                    // 2nd cas :
-                    autorisation = true;
-                }
-                else{
-                    System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
                 }
             }
         }

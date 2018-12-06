@@ -44,7 +44,7 @@ public class Exe {
 
             while (true) {
                 // DemandeEnchere(con, emailUtilisateur);
-                // new DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
+                new DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
                 System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
                 String surenchere = sc.nextLine();
                 if (surenchere.equals("non")) {
