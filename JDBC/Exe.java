@@ -42,14 +42,14 @@ public class Exe {
             boolean enchereMontante = vente.getEnchereMontante();
             boolean enchereMultipleAutorisee = vente.getEnchereMultipleAutorisee();
 
-            while (true) {
-                // DemandeEnchere(con, emailUtilisateur);
-                new DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
-                System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
-                String surenchere = sc.nextLine();
-                if (surenchere.equals("non")) {
-                    break;
-                }
+            // while (true) {
+            //     // DemanderEnchere(con, emailUtilisateur);
+            DemandeEnchere demande = new DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
+            //     System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
+            //     String surenchere = sc.nextLine();
+            //     if (surenchere.equals("non")) {
+            //         break;
+            //     }
 
             }
 
