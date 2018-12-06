@@ -39,17 +39,17 @@ public class Exe {
 
             // On doit renseigner ces infos pour faire la fonction DemandeEnchere :
             int idVente = vente.getIdVente();
-            // boolean enchereMontante = ;
-            // boolean enchereMultipleAutorisee = ;
+            boolean enchereMontante = vente.getEnchereMontante();
+            boolean enchereMultipleAutorisee = vente.getEnchereMultipleAutorisee();
 
             while (true) {
                 // DemandeEnchere(con, emailUtilisateur);
+                new DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
                 System.out.println("Voulez-vous surenchérir sur ce produit? (oui/non) ");
                 String surenchere = sc.nextLine();
                 if (surenchere.equals("non")) {
                     break;
                 }
-                // DemandeEnchere(con, email, idVente, enchereMontante, enchereMultipleAutorisee);
 
             }
 
