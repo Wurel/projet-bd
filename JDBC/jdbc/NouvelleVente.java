@@ -78,8 +78,8 @@ public class NouvelleVente{
       produit.setInt(4, stock);
       produit.setString(5, categorie);
       produit.setInt(6, idSalle);
-      System.out.println(idSalle);
-      produit.executeQuery();
+      System.out.println(idProduit);
+      // produit.executeUpdate();
 
       System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
       System.out.println("Entrez le prix de depart");
@@ -91,7 +91,7 @@ public class NouvelleVente{
       getMax = venteMax.executeQuery("SELECT MAX(id_produit) FROM PRODUIT ");
       getMax.next();
       int idVente = getMax.getInt("MAX(id_produit)");
-      PreparedStatement vente = con.prepareStatement("INSERT INTO VENTE VALUES (?, ?, ?, ?, ?, ?, ?)");
+      PreparedStatement vente = con.prepareStatement("INSERT INTO VENTE (id_vente, prix_depart_vente, id_salle, unicite_enchere, sens_vente, annulation_vente, duree_vente, date_fin) VALUES (?, ?, ?, ?, ?, ?, ?, NULL)");
       vente.setInt(1, idVente);
       vente.setInt(2, prixDepart);
       vente.setInt(3, idSalle);
@@ -125,19 +125,20 @@ public class NouvelleVente{
         vente.setString(7, "'non_limitee'");
       }
 
-      System.out.println(idSalle);
-      vente.executeQuery();
+      // System.out.println(idSalle);
+      // vente.executeUpdate();
 
       PreparedStatement prodSoumisVente = con.prepareStatement("INSERT INTO PRODUIT_SOUMIS_A_LA_VENTE VALUES(?, ?, ?)");
       prodSoumisVente.setInt(1, idProduit);
       prodSoumisVente.setInt(2, idVente);
       prodSoumisVente.setString(3, email);
+      // prodSoumisVente.executeUpdate();
 
       PreparedStatement salleVenteCree = con.prepareStatement("INSERT INT SALLE_DE_VENTE_CREEE VALUES (?, ?, ?)");
-      prodSoumisVente.setInt(1, idSalle);
-      prodSoumisVente.setInt(2, idProduit);
-      prodSoumisVente.setInt(3, idVente);
-
+      salleVenteCree.setInt(1, idSalle);
+      salleVenteCree.setInt(2, idProduit);
+      salleVenteCree.setInt(3, idVente);
+      // salleVenteCree.executeUpdate();
 
       // if (estDescendante) {
       //     PreparedStatement desc = con.prepareStatement("UPDATE VENTE SET sens_vente='descendante'");
@@ -152,13 +153,22 @@ public class NouvelleVente{
       if(estLimitee){
         // #TODO
 
-        PreparedStatement dur = con.prepareStatement("UPDATE VENTE SET duree_vente='limitee', date_fin=?, heure_fin=?");
+        PreparedStatement dur = con.prepareStatement("UPDATE VENTE SET date_fin = ? where");
+        // UPDATE VENTE SET date_fin =timestamp '2018-11-26 10:20:00' where id_vente=5;
+
+        System.out.println("Entrez l'annee de fin sous la forme aaaa mm jj hh mm");
+        int anneeFin = sc.nextInt();
+        int moisFin = sc.nextInt();
+        int jourFin = sc.nextInt();
+        int heureFin = sc.nextInt();
+        int minuteFin = sc.nextInt();
+        System.out.println(anneeFin  +""+ moisFin +""+ jourFin +""+ heureFin +""+ minuteFin);
+        dur.setTimestamp(1, new Timestamp(anneeFin, moisFin, jourFin, heureFin, minuteFin, 0, 0));
+        dur.executeUpdate();
 
 
-        System.out.println("Entrez la date de fin sous la forme aaaammjjhhmmss");
-        String dateFin = sc.nextLine();
-        dur.setString(1, dateFin);
-        dur.executeQuery();
+        // dur.setString(1, dateFin);
+        // dur.executeQuery();
 
 
       }
