@@ -85,11 +85,25 @@ public class DemandeEnchere{
          *      - ajouter 1
          */
 
+         // Il nous faut la date et l'heure :
+         java.util.Date dateEtHeure = new java.util.Date();
+         // Il y a conflit entre java.util.Date et java.sql.Date
+         // Donc on met le nom complet.
+
+         // TODO : On donne la date :
+         SimpleDateFormat formatDate = new SimpleDateFormat ("yyyy.MM.dd");
+         String date = formatDate.format(dateEtHeure);
+
+         // TODO : On donne l'heure :
+         SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
+         String heure = formatHeure.format(dateEtHeure);
+
+
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
             PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE");
             ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
-            
+
             int clePrimaireEnchere = 0;
             while (cleMax.next()){
                 clePrimaireEnchere = cleMax.getInt("cle") + 1;
@@ -97,7 +111,7 @@ public class DemandeEnchere{
 
             PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) AS cleproposee FROM ENCHERE_PROPOSEE");
             ResultSet cleMaxProposee = clesPrimairesExistantesTableEnchereProposee.executeQuery();
-            
+
             int clePrimaireEnchereProposee = 0;
             while (cleMaxProposee.next()) {
                 clePrimaireEnchereProposee = cleMaxProposee.getInt("cleproposee") + 1;
@@ -106,20 +120,6 @@ public class DemandeEnchere{
               e.printStackTrace();
               throw new NullPointerException();
         }
-
-            // Il nous faut la date et l'heure :
-            java.util.Date dateEtHeure = new java.util.Date();
-            // Il y a conflit entre java.util.Date et java.sql.Date
-            // Donc on met le nom complet.
-
-            // TODO : On donne la date :
-            SimpleDateFormat formatDate = new SimpleDateFormat ("yyyy.MM.dd");
-            String date = formatDate.format(dateEtHeure);
-
-            // TODO : On donne l'heure :
-            SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
-            String heure = formatHeure.format(dateEtHeure);
-
 
         try{
             // On insère l'offre :
@@ -171,7 +171,7 @@ public class DemandeEnchere{
             if (enchereMontante) {
                 boolean nombreCorrect = false;
                 boolean enchereSuffisante = false;
-                // On donne exprès des valeurs absures pour éviter des messages d'erreurs désagréables. 
+                // On donne exprès des valeurs absures pour éviter des messages d'erreurs désagréables.
                 // Avant de les utiliser, on vérifiera bien que la valeur a été changée
                 int prixAchat = -1;
                 int prixActuel = -1;
