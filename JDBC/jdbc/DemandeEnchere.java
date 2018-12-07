@@ -30,19 +30,19 @@ public class DemandeEnchere{
             else {
 
                 try {
-                    PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE_PROPOSEE WHERE email_utilisateur =? AND id_vente =?");
+                    PreparedStatement droitEnchere = con.prepareStatement("SELECT COUNT(num_enchere) As total FROM ENCHERE_PROPOSEE WHERE email_utilisateur =? AND id_vente =?");
                     droitEnchere.setString(1, emailAcheteur);
                     String idVenteString = "";
                     droitEnchere.setString(2, idVenteString.valueOf(idVente));
                     ResultSet nombreEnchere = droitEnchere.executeQuery();
-
-                    if (nombreEnchere.getInt("count") == 0) {
-                        // 2nd cas :
-                        autorisation = true;
-                    }
-
-                    else{
-                        System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
+                    while(nombreEnchere.next()){
+                        if (nombreEnchere.getInt("total") == 0) {
+                            // 2nd cas :
+                            autorisation = true;
+                        }
+                        else{
+                            System.out.println("Désolé, les enchères multiples ne sont pas autorisées. Vous avez déjà enchéri sur cette vente.");
+                        }
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -87,14 +87,25 @@ public class DemandeEnchere{
 
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
-            PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE");
+            PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE");
             ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
-            int clePrimaireEnchere = cleMax.getInt("num_enchere") + 1;
+            
+            int clePrimaireEnchere = 0;
+            while (cleMax.next()){
+                clePrimaireEnchere = cleMax.getInt("cle") + 1;
+            }
 
-            PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE_PROPOSEE");
+            PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) AS cleproposee FROM ENCHERE_PROPOSEE");
             ResultSet cleMaxProposee = clesPrimairesExistantesTableEnchereProposee.executeQuery();
-            int clePrimaireEnchereProposee = cleMaxProposee.getInt("num_enchere") + 1;
-
+            
+            int clePrimaireEnchereProposee = 0;
+            while (cleMaxProposee.next()) {
+                clePrimaireEnchereProposee = cleMaxProposee.getInt("cleproposee") + 1;
+            }
+        } catch (SQLException e) {
+              e.printStackTrace();
+              throw new NullPointerException();
+        }
 
             // Il nous faut la date et l'heure :
             java.util.Date dateEtHeure = new java.util.Date();
@@ -109,14 +120,16 @@ public class DemandeEnchere{
             SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
             String heure = formatHeure.format(dateEtHeure);
 
+
+        try{
             // On insère l'offre :
             PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
             // On insère les attributs dans le bon sens :
             enchere.setInt(1, clePrimaireEnchere);
             enchere.setInt(2, prixEnchere);
             enchere.setString(3, date);
-            enchere.setString(4, heure);
-            enchere.setInt(5, 1);
+            // enchere.setString(4, heure);
+            enchere.setInt(4, 1);
 
             ResultSet rs = enchere.executeQuery();
             PreparedStatement commit = con.prepareStatement("COMMIT");
@@ -158,8 +171,11 @@ public class DemandeEnchere{
             if (enchereMontante) {
                 boolean nombreCorrect = false;
                 boolean enchereSuffisante = false;
+                // On donne exprès des valeurs absures pour éviter des messages d'erreurs désagréables. 
+                // Avant de les utiliser, on vérifiera bien que la valeur a été changée
                 int prixAchat = -1;
-                int prixActuel;
+                int prixActuel = -1;
+
                 String offre = "";
                 while (!enchereSuffisante){
                     while (!nombreCorrect) {
@@ -179,11 +195,13 @@ public class DemandeEnchere{
                     // On vérifie maintenant que l'offre est suffisante :
                     try {
 
-                        PreparedStatement prixEncheres = con.prepareStatement("SELECT MAX(PRIX_ENCHERE) FROM ENCHERES WHERE ID_VENTE =? ");
+                        PreparedStatement prixEncheres = con.prepareStatement("SELECT MAX(EN.prix_enchere) As prix FROM ENCHERE_PROPOSEE EP join ENCHERE EN ON EP.num_enchere = EN.num_enchere WHERE EP.id_vente =? ");
                         prixEncheres.setInt(1, idVente);
                         ResultSet rs = prixEncheres.executeQuery();
                         // Comparaison des nombres :
-                        prixActuel = rs.getInt("MAX");
+                        while(rs.next()) {
+                            prixActuel = rs.getInt("prix");
+                        }
                     }
                     catch (SQLException e) {
                         e.printStackTrace();
