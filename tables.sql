@@ -50,7 +50,7 @@ create table CARACTERISTIQUE (
 create table VENTE (
   id_vente int not null,
   prix_depart_vente int check (prix_depart_vente > 0),
-  date_debut_vente timestamp not null default current_timestamp,
+  date_debut_vente timestamp default current_timestamp,
   id_salle int not null,
   unicite_enchere character varying(30) default 'plusieurs',
   sens_vente character varying(30) default 'montante',
