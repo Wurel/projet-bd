@@ -111,7 +111,7 @@ public class DemandeEnchere{
                 nombreEncheres = nombreCles.getInt("COUNT(num_enchere)");
             }
 
-            if (nombreEncheres > 0) {    
+            if (nombreEncheres > 0) {
                 PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE_PROPOSEE");
                 ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
 
@@ -188,6 +188,20 @@ public class DemandeEnchere{
                 // Avant de les utiliser, on vérifiera bien que la valeur a été changée
                 int prixAchat = -1;
                 int prixActuel = -1;
+                try {
+
+                  PreparedStatement prixEncheres = con.prepareStatement("SELECT MAX(EN.prix_enchere) As prix FROM ENCHERE_PROPOSEE EP join ENCHERE EN ON EP.num_enchere = EN.num_enchere WHERE EP.id_vente =? ");
+                  prixEncheres.setInt(1, idVente);
+                  ResultSet rs = prixEncheres.executeQuery();
+                  // Comparaison des nombres :
+                  while(rs.next()) {
+                    prixActuel = rs.getInt("prix");
+                  }
+                }
+                catch (SQLException e) {
+                  e.printStackTrace();
+                  throw new NullPointerException();
+                }
 
                 String offre = "";
                 while (!enchereSuffisante){
@@ -206,20 +220,6 @@ public class DemandeEnchere{
                         }
                     }
                     // On vérifie maintenant que l'offre est suffisante :
-                    try {
-
-                        PreparedStatement prixEncheres = con.prepareStatement("SELECT MAX(EN.prix_enchere) As prix FROM ENCHERE_PROPOSEE EP join ENCHERE EN ON EP.num_enchere = EN.num_enchere WHERE EP.id_vente =? ");
-                        prixEncheres.setInt(1, idVente);
-                        ResultSet rs = prixEncheres.executeQuery();
-                        // Comparaison des nombres :
-                        while(rs.next()) {
-                            prixActuel = rs.getInt("prix");
-                        }
-                    }
-                    catch (SQLException e) {
-                        e.printStackTrace();
-                        throw new NullPointerException();
-                    }
                     prixAchat = Integer.parseInt(offre);
                     enchereSuffisante = (prixAchat > prixActuel);
 
@@ -238,7 +238,7 @@ public class DemandeEnchere{
             else {
 
                 // On récupère le prix actuel :
-                int prixActuel = 0;
+                int prixActuel = -1;
                 try {
                     PreparedStatement prixEncheres = con.prepareStatement("SELECT prix_depart_vente FROM VENTE WHERE id_vente =? ");
                     prixEncheres.setInt(1, idVente);
