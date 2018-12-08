@@ -75,7 +75,7 @@ public class DemandeEnchere{
         return autorisation;
     }
 
-    private void FaireEnchere(String emailAcheteur, int idVente, int prixEnchere){
+    private void FaireEnchere(Connection con, String emailAcheteur, int idVente, int prixEnchere){
         /*
          * Cette fonction réalise l'enchère en écrivant dans la base de données.
          *
@@ -104,11 +104,11 @@ public class DemandeEnchere{
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
             int clePrimaireEnchere = 1;
-            PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) As nombre FROM ENCHERE");
+            PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) FROM ENCHERE");
             ResultSet nombreCles = nombreEnchere.executeQuery();
-            int nombreEncheres = 0;
+            int nombreEncheres = 1;
             while (nombreCles.next()){
-                nombreEncheres = nombreCles.getInt("nombre");
+                nombreEncheres = nombreCles.getInt("COUNT(num_enchere)");
             }
 
             if (nombreEncheres > 0) {    
@@ -141,18 +141,17 @@ public class DemandeEnchere{
             enchere.setString(3, date);
             enchere.setInt(4, 1);
             enchere.setInt(5, idVente);
-
+            System.out.println("CHECKPOINT 1");
             ResultSet rs = enchere.executeQuery();
-            PreparedStatement commit = con.prepareStatement("COMMIT");
-            // commit.executeQuery();
 
             PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
             // On insère les attributs dans le bon sens :
             enchere.setInt(1, clePrimaireEnchereProposee);
             enchere.setInt(2, idVente);
             enchere.setString(3, emailAcheteur);
-
             rs = enchereProposee.executeQuery();
+
+            PreparedStatement commit = con.prepareStatement("COMMIT");
             commit = con.prepareStatement("COMMIT");
             commit.executeQuery();
 
@@ -229,7 +228,7 @@ public class DemandeEnchere{
                     }
                 }
 
-                FaireEnchere(emailAcheteur, idVente, prixAchat);
+                FaireEnchere(con, emailAcheteur, idVente, prixAchat);
             }
 
             // On traite maintenant le cas des enchères descendantes :
@@ -257,7 +256,7 @@ public class DemandeEnchere{
                 String reponse = sc.nextLine();
 
                 if (reponse.equals("oui")) {
-                    FaireEnchere(emailAcheteur, idVente, prixActuel);
+                    FaireEnchere(con, emailAcheteur, idVente, prixActuel);
                 }
 
                 else {
