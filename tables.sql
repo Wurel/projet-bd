@@ -47,21 +47,10 @@ create table CARACTERISTIQUE (
 -- alter table CARACTERISTIQUE drop primary key;
 -- alter table CARACTERISTIQUE add primary key (nom_caracteristique, id_produit);
 
-create table ENCHERE (
-  num_enchere int not null,
-  prix_enchere int,
-  date_enchere timestamp,
-  quantite int,
-  id_vente int not null,
-  primary key (num_enchere),
-  foreign key (id_vente) references VENTE(id_vente),
-  constraint CHK_Ench check (prix_enchere > 0 and quantite > 0)
-);
-
 create table VENTE (
   id_vente int not null,
   prix_depart_vente int check (prix_depart_vente > 0),
-  date_debut_vente timestamp not null default current_timestamp,
+  date_debut_vente timestamp default current_timestamp,
   id_salle int not null,
   unicite_enchere character varying(30) default 'plusieurs',
   sens_vente character varying(30) default 'montante',
@@ -73,6 +62,17 @@ create table VENTE (
   constraint CHK_Typ check (unicite_enchere in ('unique', 'plusieurs') and sens_vente in ('descendante', 'montante') and annulation_vente in ('revocable', 'non_revocable') and duree_vente in ('limitee', 'non_limitee'))
 );
 -- constraint CHK_Date check ((duree_vente = 'non_limitee' AND date_fin = null) OR (duree_vente = 'limitee' AND date_fin != null))
+
+create table ENCHERE (
+  num_enchere int not null,
+  prix_enchere int,
+  date_enchere timestamp,
+  quantite int,
+  id_vente int not null,
+  primary key (num_enchere),
+  foreign key (id_vente) references VENTE(id_vente),
+  constraint CHK_Ench check (prix_enchere > 0 and quantite > 0)
+);
 
 create table RENTRE_DANS (
   email_utilisateur character varying(30) not null,
