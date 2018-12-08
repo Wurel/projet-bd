@@ -63,6 +63,7 @@ public class MyConnexion{
         creationCompte.executeQuery();
         PreparedStatement commit = con.prepareStatement("COMMIT");
         commit.executeQuery();
+        this.emailUtilisateur = mail;
         connecte = true;
 
       }

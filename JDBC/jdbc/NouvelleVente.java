@@ -85,21 +85,23 @@ public class NouvelleVente{
       produit.setInt(6, idSalle);
       produit.executeUpdate();
 
-      boolean ajouterCaract = true;
-      while(ajouterCaract){
-        System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
-        String nomCaract = sc.next();
-        System.out.println("Decrivez la caracteristique de votre produit");
-        String descrition = "";
-        descrition = sc.nextLine();
-        System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
-        reponse = sc.nextLine();
-        Statement caracte = con.createStatement();
-        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+descrition+idProduit+")");
-        if (reponse.equals("non")) {
-          ajouterCaract = false;
-        }
-      }
+      // boolean ajouterCaract = true;
+      // while(ajouterCaract){
+      //   System.out.println("Entrez le nom de la caracteristique que vous voulez decrire(un mot)");
+      //   // String nomCaract = sc.nextLine();
+      //   System.out.println("Decrivez la caracteristique de votre produit");
+      //   // Scanner nvSc = new Scanner(System.in);
+      //   // String description = nvSc.nextLine();
+      //   System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
+      //   while (!sc.hasNextInt()) sc.next();
+      //   int nvCarac = sc.nextInt();
+      //   System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+sc.nextLine()+","+sc.nextLine()+","+idProduit+")");
+      //   // Statement caracte = con.createStatement();
+      //   // caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
+      //   if (nvCarac == 0) {
+      //     ajouterCaract = false;
+      //   }
+      // }
 
       System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
       System.out.println("Entrez le prix de depart");
