@@ -88,14 +88,14 @@ public class NouvelleVente{
       boolean ajouterCaract = true;
       while(ajouterCaract){
         System.out.println("Entrez le nom de la caracteristique que vous voulez decrire(un mot)");
-        String nomCaract = sc.nextLine();
+        // String nomCaract = sc.nextLine();
         System.out.println("Decrivez la caracteristique de votre produit");
-        Scanner nvSc = new Scanner(System.in);
-        String description = nvSc.nextLine();
+        // Scanner nvSc = new Scanner(System.in);
+        // String description = nvSc.nextLine();
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
         while (!sc.hasNextInt()) sc.next();
         int nvCarac = sc.nextInt();
-        System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
+        System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+sc.nextLine()+","+sc.nextLine()+","+idProduit+")");
         // Statement caracte = con.createStatement();
         // caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
         if (nvCarac == 0) {
