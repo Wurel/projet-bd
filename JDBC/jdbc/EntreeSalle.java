@@ -35,7 +35,7 @@ public class EntreeSalle{
         // Est ce que ca marche
         // while (!sc.hasNextInt()) sc.next();
         while (rs.next()) {
-          System.out.println(rs.getInt("S.id_salle") + " " + rs.getString("S.NOM_CATEGORIE") + " " + rs.getString("V.unicite_enchere") + " " + rs.getString("V.sens_vente")+ " " + rs.getString("V.annulation_vente")+ " " + rs.getString("V.duree_vente"));
+          System.out.println(rs.getInt("S.id_salle") + " " + rs.getString("S.nom_categorie")); //+ " " + rs.getString("V.unicite_enchere") + " " + rs.getString("V.sens_vente")+ " " + rs.getString("V.annulation_vente")+ " " + rs.getString("V.duree_vente"));
         }
         System.out.println("Veuillez choisir la salle d'enchere :");
         numSalle = sc.nextInt();
