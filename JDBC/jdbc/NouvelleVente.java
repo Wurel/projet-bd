@@ -88,7 +88,7 @@ public class NouvelleVente{
       boolean ajouterCaract = true;
       while(ajouterCaract){
         System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
-        String nomCaract = sc.nextLine();
+        String nomCaract = sc.next();
         System.out.println("Decrivez la caracteristique de votre produit");
         String descrition = "";
         descrition = sc.nextLine();
