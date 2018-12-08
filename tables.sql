@@ -1,4 +1,4 @@
-begin
+--begin
 --create database baie_electronique;
 
 create table UTILISATEUR (
@@ -112,7 +112,7 @@ create table SALLE_DE_VENTE_CREEE (
   foreign key (id_vente) references VENTE(id_vente)
 );
 
-end;
+--end;
 /
 
 -- l'application java gère l'unicité des types de ventes présentes dans chaque salle
