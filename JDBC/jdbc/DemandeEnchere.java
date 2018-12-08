@@ -90,13 +90,13 @@ public class DemandeEnchere{
          // Il y a conflit entre java.util.Date et java.sql.Date
          // Donc on met le nom complet.
 
-         // TODO : On donne la date :
-         SimpleDateFormat formatDate = new SimpleDateFormat ("yyyy.MM.dd");
+         // On donne la date :
+         SimpleDateFormat formatDate = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss:SS");
          String date = formatDate.format(dateEtHeure);
 
-         // TODO : On donne l'heure :
-         SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
-         String heure = formatHeure.format(dateEtHeure);
+         // On donne l'heure :
+         // SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
+         // String heure = formatHeure.format(dateEtHeure);
 
 
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
@@ -120,7 +120,7 @@ public class DemandeEnchere{
         //       e.printStackTrace();
         //       throw new NullPointerException();
         // }
-        //
+        
         // try{
             // On insère l'offre :
             PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
@@ -128,12 +128,12 @@ public class DemandeEnchere{
             enchere.setInt(1, clePrimaireEnchere);
             enchere.setInt(2, prixEnchere);
             enchere.setString(3, date);
-            // enchere.setString(4, heure);
             enchere.setInt(4, 1);
+            enchere.setInt(5, idVente);
 
             ResultSet rs = enchere.executeQuery();
             PreparedStatement commit = con.prepareStatement("COMMIT");
-            commit.executeQuery();
+            // commit.executeQuery();
 
             PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
             // On insère les attributs dans le bon sens :
