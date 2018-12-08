@@ -72,20 +72,6 @@ public class NouvelleVente{
       int stock = sc.nextInt();
       PreparedStatement produit = con.prepareStatement("INSERT INTO PRODUIT VALUES (?, ?, ?, ?, ?, ?)");
 
-      boolean ajouterCaract = true;
-      while(ajouterCaract){
-        System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
-        String nomCaract = sc.nextLine();
-        System.out.println("Decrivez la caracteristique de votre produit");
-        String caract = sc.nextLine();
-        System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
-        reponse = sc.nextLine();
-        Statement caracte = con.createStatement();
-        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+caract+idProduit+")");
-        if (reponse.equals("non")) {
-           ajouterCaract = false;
-        }
-      }
 
       Statement prodMax = con.createStatement();
       getMax = prodMax.executeQuery("SELECT MAX(id_produit) FROM PRODUIT ");
@@ -101,6 +87,21 @@ public class NouvelleVente{
       System.out.println(idSalle);
       produit.executeUpdate();
 
+      boolean ajouterCaract = true;
+      while(ajouterCaract){
+        System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
+        String nomCaract = sc.nextLine();
+        System.out.println("Decrivez la caracteristique de votre produit");
+        String caract = sc.nextLine();
+        System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
+        reponse = sc.nextLine();
+        Statement caracte = con.createStatement();
+        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+caract+idProduit+")");
+        if (reponse.equals("non")) {
+          ajouterCaract = false;
+        }
+      }
+      
       System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
       System.out.println("Entrez le prix de depart");
       // Est ce que ca marche
