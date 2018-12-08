@@ -83,8 +83,6 @@ public class NouvelleVente{
       produit.setInt(4, stock);
       produit.setString(5, categorie);
       produit.setInt(6, idSalle);
-      System.out.println(idProduit);
-      System.out.println(idSalle);
       produit.executeUpdate();
 
       boolean ajouterCaract = true;
@@ -92,16 +90,16 @@ public class NouvelleVente{
         System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
         String nomCaract = sc.nextLine();
         System.out.println("Decrivez la caracteristique de votre produit");
-        String caract = sc.nextLine();
+        String descrition = sc.nextLine();
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
         reponse = sc.nextLine();
         Statement caracte = con.createStatement();
-        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+caract+idProduit+")");
+        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+descrition+idProduit+")");
         if (reponse.equals("non")) {
           ajouterCaract = false;
         }
       }
-      
+
       System.out.println("Nous allons maintenant determiner les informations relatives a la vente");
       System.out.println("Entrez le prix de depart");
       // Est ce que ca marche
