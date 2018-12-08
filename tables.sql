@@ -1,5 +1,5 @@
 begin
-create database baie_electronique;
+--create database baie_electronique;
 
 create table UTILISATEUR (
   email_utilisateur character varying(50) not null,
