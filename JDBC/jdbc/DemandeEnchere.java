@@ -142,18 +142,21 @@ public class DemandeEnchere{
             enchere.setInt(4, 1);
             enchere.setInt(5, idVente);
             System.out.println("CHECKPOINT 1");
-            ResultSet rs = enchere.executeQuery();
+            System.out.println(enchere.toString());
+            ResultSet resultat = enchere.executeQuery();
+            PreparedStatement commit = con.prepareStatement("COMMIT");
+            commit.executeQuery();
+            System.out.println("CHECKPOINT 2");
 
             PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
             // On insère les attributs dans le bon sens :
             enchere.setInt(1, clePrimaireEnchereProposee);
             enchere.setInt(2, idVente);
             enchere.setString(3, emailAcheteur);
-            rs = enchereProposee.executeQuery();
+            ResultSet result = enchereProposee.executeQuery();
 
-            PreparedStatement commit = con.prepareStatement("COMMIT");
-            commit = con.prepareStatement("COMMIT");
-            commit.executeQuery();
+            PreparedStatement autreCommit = con.prepareStatement("COMMIT");
+            autreCommit.executeQuery();
 
             System.out.println("Félicitation! Vous avez bien encherri sur cette vente.");
         } catch (SQLException e) {
