@@ -64,7 +64,7 @@ public class MyConnexion{
         PreparedStatement commit = con.prepareStatement("COMMIT");
         commit.executeQuery();
         this.emailUtilisateur = mail;
-        // connecte = true;
+        connecte = true;
 
       }
     }
