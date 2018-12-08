@@ -28,7 +28,7 @@ public class EntreeSalle{
       boolean salleExiste = new Boolean(false);
       int numSalle = -1;
       while(!salleExiste){
-        PreparedStatement salles = con.prepareStatement("SELECT S.id_salle, S.nom_categorie, V.unicite_enchere, V.sens_vente, V.annulation_vente, V.duree_vente FROM SALLE S, VENTE V WHERE S.nom_categorie=? AND S.id_salle = V.id_salle");
+        PreparedStatement salles = con.prepareStatement("SELECT DISTINCT(S.id_salle, S.nom_categorie, V.unicite_enchere, V.sens_vente, V.annulation_vente, V.duree_vente) FROM SALLE S, VENTE V WHERE S.nom_categorie=? AND S.id_salle = V.id_salle");
         this.categorie.toLowerCase();
         salles.setString(1, this.categorie);
         ResultSet rs = salles.executeQuery();
