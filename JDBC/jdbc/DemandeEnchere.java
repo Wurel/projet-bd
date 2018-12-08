@@ -57,13 +57,15 @@ public class DemandeEnchere{
                 droitEnchere.setInt(1, idVente);
                 ResultSet nombreEnchere = droitEnchere.executeQuery();
 
-                if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
+                while (nombreEnchere.next()) {
+                    if (nombreEnchere.getInt("COUNT(num_enchere)") == 0) {
 
-                    // 3ème cas :
-                    autorisation = true;
-                }
-                else{
-                    System.out.println("Désolé, quelqu'un a déjà enchéri sur cette vente.");
+                        // 3ème cas :
+                        autorisation = true;
+                    }
+                    else{
+                        System.out.println("Désolé, quelqu'un a déjà enchéri sur cette vente.");
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -102,7 +104,7 @@ public class DemandeEnchere{
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
             int clePrimaireEnchere = 1;
-            PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) AS nombre FROM ENCHERE");
+            PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) As nombre FROM ENCHERE");
             ResultSet nombreCles = nombreEnchere.executeQuery();
             int nombreEncheres = 0;
             while (nombreCles.next()){
@@ -110,7 +112,7 @@ public class DemandeEnchere{
             }
 
             if (nombreEncheres > 0) {    
-                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE");
+                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE_PROPOSEE");
                 ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
 
                 while (cleMax.next()){
@@ -173,7 +175,7 @@ public class DemandeEnchere{
 
         // Si l'enchère est autorisée :
         if (AutoriserEnchere(con, emailAcheteur, idVente, enchereMontante, enchereMultipleAutorisee)) {
-
+            System.out.println("Vous etes autorisé à encherrir sur cette vente.\n");
             // Les processus d'enchères ne sont pal les mêmes pour des enchères montantes et descendantes
             // On va donc séparer les 2 processus :
 
@@ -234,13 +236,15 @@ public class DemandeEnchere{
             else {
 
                 // On récupère le prix actuel :
-                int prixActuel;
+                int prixActuel = 0;
                 try {
                     PreparedStatement prixEncheres = con.prepareStatement("SELECT prix_depart_vente FROM VENTE WHERE id_vente =? ");
                     prixEncheres.setInt(1, idVente);
                     ResultSet rs = prixEncheres.executeQuery();
 
-                    prixActuel = rs.getInt("prix_depart_vente");
+                    while(rs.next()) {
+                        prixActuel = rs.getInt("prix_depart_vente");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     throw new NullPointerException();
