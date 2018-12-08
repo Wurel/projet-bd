@@ -30,8 +30,9 @@ insert into ENCHERE values (5, 55, timestamp '2018-11-26 06:00:00', 5);
 insert into VENTE (id_vente, prix_depart_vente, id_salle) values (1, 50, 2);
 insert into VENTE (id_vente, prix_depart_vente, id_salle, unicite_enchere) values (2, 60, 3, 'unique');
 insert into VENTE (id_vente, prix_depart_vente, id_salle, sens_vente) values (3, 1000000, 1, 'descendante');
-insert into VENTE (id_vente, prix_depart_vente, id_salle, annulation_vente) values (4, 1000000, 1, 'revocable');
-insert into VENTE (id_vente, prix_depart_vente, id_salle, duree_vente, date_fin) values (5, 50, 2, 'limitee', timestamp '2018-11-26 10:20:00');
+-- ces 2 requetes ne devraient pas fonctionner : un seul type de vente par salle
+-- insert into VENTE (id_vente, prix_depart_vente, id_salle, annulation_vente) values (4, 1000000, 1, 'revocable');
+-- insert into VENTE (id_vente, prix_depart_vente, id_salle, duree_vente, date_fin) values (5, 50, 2, 'limitee', timestamp '2018-11-26 10:20:00');
 
 insert into RENTRE_DANS values ('paul.dupont@gmail.com', 1);
 insert into RENTRE_DANS values ('pierre.durand@gmail.com', 2);

@@ -39,10 +39,11 @@ create table CARACTERISTIQUE (
   nom_caracteristique character varying(30) not null,
   description_caracteristique character varying(60),
   id_produit int not null,
-  primary key (nom_caracteristique, id_produit), -- l'id produit est dans la clé
+  primary key (nom_caracteristique, id_produit), -- l'id produit est dans la clé (Done)
   foreign key (id_produit) references PRODUIT(id_produit)
 );
 
+-- Done
 -- alter table CARACTERISTIQUE drop primary key;
 -- alter table CARACTERISTIQUE add primary key (nom_caracteristique, id_produit);
 
@@ -51,13 +52,16 @@ create table ENCHERE (
   prix_enchere int,
   date_enchere timestamp,
   quantite int,
+  id_vente int not null,
   primary key (num_enchere),
+  foreign key (id_vente) references VENTE(id_vente),
   constraint CHK_Ench check (prix_enchere > 0 and quantite > 0)
 );
 
 create table VENTE (
   id_vente int not null,
   prix_depart_vente int check (prix_depart_vente > 0),
+  date_debut_vente timestamp not null default current_timestamp,
   id_salle int not null,
   unicite_enchere character varying(30) default 'plusieurs',
   sens_vente character varying(30) default 'montante',
@@ -66,35 +70,9 @@ create table VENTE (
   date_fin timestamp null,
   primary key (id_vente),
   foreign key (id_salle) references SALLE(id_salle),
-  constraint CHK_Typ check (unicite_enchere in ('unique', 'plusieurs') and sens_vente in ('descendante', 'montante') and annulation_vente in ('revocable', 'non_revocable') and duree_vente in ('limitee', 'non_limitee')),
-  constraint CHK_Date check ((duree_vente = 'non_limitee' AND date_fin = null) OR (duree_vente = 'limitee' AND date_fin != null))
+  constraint CHK_Typ check (unicite_enchere in ('unique', 'plusieurs') and sens_vente in ('descendante', 'montante') and annulation_vente in ('revocable', 'non_revocable') and duree_vente in ('limitee', 'non_limitee'))
 );
-
--- create table UNIQUE (
---   id_vente int not null,
---   primary key (id_vente),
---   foreign key (id_vente) references VENTE(id_vente)
--- );
---
--- create table DESCENDANTE (
---   id_vente int not null,
---   primary key (id_vente),
---   foreign key (id_vente) references VENTE(id_vente)
--- );
---
--- create table REVOCABLE (
---   id_vente int not null,
---   primary key (id_vente),
---   foreign key (id_vente) references VENTE(id_vente)
--- );
---
--- create table DUREE_LIMITEE (
---   id_vente int not null,
---   date_fin date,
---   heure_fin time,
---   primary key (id_vente),
---   foreign key (id_vente) references VENTE(id_vente)
--- );
+-- constraint CHK_Date check ((duree_vente = 'non_limitee' AND date_fin = null) OR (duree_vente = 'limitee' AND date_fin != null))
 
 create table RENTRE_DANS (
   email_utilisateur character varying(30) not null,
@@ -136,15 +114,10 @@ create table SALLE_DE_VENTE_CREEE (
 
 end;
 /
--- create table ENCHERE_UNIQUE_PROPOSEE (
---   num_enchere int not null,
---   id_vente int not null,
---   email_utilisateur character varying(30) not null,
---   primary key (num_enchere, id_vente, email_utilisateur) references ENCHERE(num_enchere), VENTE(id_vente), UTILISATEUR(email_utilisateur)
--- );
 
 -- l'application java gère l'unicité des types de ventes présentes dans chaque salle
--- ajouter une constraint pour qu'une enchère soit valide, ie quantité <= stock_produit and prix_enchere >= prix_depart_vente
+-- java gère la contrainte de validité d'enchère, ie quantité <= stock_produit and prix_enchere >= prix_depart_vente and date_enchere >= date_debut_vente
 
+-- Done
 -- dans la relation enchere : rajouter l'id_vente
 -- dans la relation vente : rajouter l'id salle
