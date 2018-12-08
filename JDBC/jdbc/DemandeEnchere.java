@@ -103,10 +103,10 @@ public class DemandeEnchere{
         try {
             int clePrimaireEnchere = 1;
             PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) AS nombre FROM ENCHERE");
-            ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
+            ResultSet nombreCles = nombreEnchere.executeQuery();
             int nombreEncheres = 0;
-            while (nombreEnchere.next()){
-                nombreEncheres = nombreEnchere.getInt("nombre");
+            while (nombreCles.next()){
+                nombreEncheres = nombreCles.getInt("nombre");
             }
 
             if (nombreEncheres > 0) {    
