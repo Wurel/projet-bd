@@ -21,10 +21,10 @@ insert into CARACTERISTIQUE values ('Région', 'Bourgogne', 3);
 insert into CARACTERISTIQUE values ('Région', 'Rhône-Alpes', 4);
 insert into CARACTERISTIQUE values ('Région', 'Champagne-Ardennes', 5);
 
-insert into ENCHERE values (1, 60, timestamp '2018-11-26 10:20:00', 5);
-insert into ENCHERE values (2, 65, timestamp '2018-11-26 08:00:00', 5);
-insert into ENCHERE values (3, 1500000, timestamp '2018-11-26 10:20:00', 1);
-insert into ENCHERE values (4, 1500000, timestamp '2018-11-26 08:00:00', 1);
+insert into ENCHERE values (1, 60, timestamp '2018-11-26 10:20:00', 1, 5);
+insert into ENCHERE values (2, 65, timestamp '2018-11-26 08:00:00', 1, 5);
+insert into ENCHERE values (3, 1500000, timestamp '2018-11-26 10:20:00', 1, 1);
+insert into ENCHERE values (4, 1500000, timestamp '2018-11-26 08:00:00', 1, 1);
 insert into ENCHERE values (5, 55, timestamp '2018-11-26 06:00:00', 5);
 
 insert into VENTE (id_vente, prix_depart_vente, id_salle) values (1, 50, 2);
