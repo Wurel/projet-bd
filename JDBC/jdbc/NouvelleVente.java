@@ -90,7 +90,8 @@ public class NouvelleVente{
         System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
         String nomCaract = sc.nextLine();
         System.out.println("Decrivez la caracteristique de votre produit");
-        String descrition = sc.nextLine();
+        String descrition = "";
+        descrition = sc.nextLine();
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
         reponse = sc.nextLine();
         Statement caracte = con.createStatement();
