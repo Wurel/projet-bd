@@ -1,4 +1,4 @@
-begin
+--begin
 insert into UTILISATEUR values ('paul.dupont@gmail.com', 'Dupont', 'Paul', '1 rue des jardins');
 insert into UTILISATEUR values ('pierre.durand@gmail.com', 'Durand', 'Pierre', '1 rue de lepic');
 
@@ -55,4 +55,4 @@ insert into SALLE_DE_VENTE_CREEE values (2, 3, 1);
 insert into SALLE_DE_VENTE_CREEE values (2, 4, 5);
 insert into SALLE_DE_VENTE_CREEE values (3, 5, 2);
 
-end;
+--end;
