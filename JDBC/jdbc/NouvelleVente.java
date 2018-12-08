@@ -87,16 +87,16 @@ public class NouvelleVente{
 
       boolean ajouterCaract = true;
       while(ajouterCaract){
-        System.out.println("Entrez le nom de la caracteristique que vous voulez decrire");
+        System.out.println("Entrez le nom de la caracteristique que vous voulez decrire(un mot)");
         String nomCaract = sc.next();
         System.out.println("Decrivez la caracteristique de votre produit");
         String descrition = "";
         descrition = sc.nextLine();
-        System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui/non)");
-        reponse = sc.nextLine();
+        System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
+        int nvCarac = sc.nextInt();
         Statement caracte = con.createStatement();
         caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+descrition+idProduit+")");
-        if (reponse.equals("non")) {
+        if (nvCarac == 0) {
           ajouterCaract = false;
         }
       }
