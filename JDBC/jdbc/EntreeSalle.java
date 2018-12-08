@@ -16,7 +16,7 @@ public class EntreeSalle{
       String reponse = sc.nextLine();
       if (reponse.equals("oui")) {
         Statement salles = con.createStatement();
-        ResultSet rs = salles.executeQuery("SELECT * FROM CATEGORIE");
+        ResultSet rs = salles.executeQuery("SELECT * FROM CATEGORIES");
         while (rs.next()) {
           System.out.println(rs.getString("NOM_CATEGORIE") + " " + rs.getString("DESCRIPTION_CATEGORIE"));
         }
