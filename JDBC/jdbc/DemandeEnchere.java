@@ -101,12 +101,21 @@ public class DemandeEnchere{
 
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
-            PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE");
+            int clePrimaireEnchere = 1;
+            PreparedStatement nombreEnchere = con.prepareStatement("SELECT COUNT(num_enchere) AS nombre FROM ENCHERE");
             ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
+            int nombreEncheres = 0;
+            while (nombreEnchere.next()){
+                nombreEncheres = nombreEnchere.getInt("nombre");
+            }
 
-            int clePrimaireEnchere = 0;
-            while (cleMax.next()){
-                clePrimaireEnchere = cleMax.getInt("cle") + 1;
+            if (nombreEncheres > 0) {    
+                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE");
+                ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
+
+                while (cleMax.next()){
+                    clePrimaireEnchere = cleMax.getInt("cle") + 1;
+                }
             }
 
             PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) AS cleproposee FROM ENCHERE_PROPOSEE");
@@ -120,7 +129,7 @@ public class DemandeEnchere{
         //       e.printStackTrace();
         //       throw new NullPointerException();
         // }
-        
+
         // try{
             // On insère l'offre :
             PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
