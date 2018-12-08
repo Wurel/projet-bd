@@ -93,7 +93,8 @@ public class NouvelleVente{
         String descrition = "";
         descrition = sc.nextLine();
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
-        int nvCarac = sc.nextInt();
+        while (!sc.hasNextInt()) sc.next();
+        int prixDepart = sc.nextInt();
         Statement caracte = con.createStatement();
         caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+descrition+idProduit+")");
         if (nvCarac == 0) {
