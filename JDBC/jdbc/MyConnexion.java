@@ -21,7 +21,7 @@ public class MyConnexion{
     // String mdp = sc.nextLine();
 
     DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-    this.con = DriverManager.getConnection(url, "poraa", "poraa");
+    this.con = DriverManager.getConnection(url, "cheymola", "cheymola");
     this.con.setAutoCommit(false);
 
     boolean connecte = false;
