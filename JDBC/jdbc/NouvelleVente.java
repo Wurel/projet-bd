@@ -91,12 +91,12 @@ public class NouvelleVente{
         String nomCaract = sc.nextLine();
         System.out.println("Decrivez la caracteristique de votre produit");
         Scanner nvSc = new Scanner(System.in);
-        String descrition = nvSc.nextLine();
+        String description = nvSc.nextLine();
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
         while (!sc.hasNextInt()) sc.next();
         int nvCarac = sc.nextInt();
         Statement caracte = con.createStatement();
-        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+descrition+","+idProduit+")");
+        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
         if (nvCarac == 0) {
           ajouterCaract = false;
         }
