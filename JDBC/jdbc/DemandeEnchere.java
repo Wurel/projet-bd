@@ -116,12 +116,12 @@ public class DemandeEnchere{
             while (cleMaxProposee.next()) {
                 clePrimaireEnchereProposee = cleMaxProposee.getInt("cleproposee") + 1;
             }
-        } catch (SQLException e) {
-              e.printStackTrace();
-              throw new NullPointerException();
-        }
-
-        try{
+        // } catch (SQLException e) {
+        //       e.printStackTrace();
+        //       throw new NullPointerException();
+        // }
+        //
+        // try{
             // On insère l'offre :
             PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
             // On insère les attributs dans le bon sens :
