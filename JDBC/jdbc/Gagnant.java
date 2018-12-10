@@ -23,6 +23,7 @@ public class Gagnant{
           System.out.println(nvRs.getString("EMAIL_UTILISATEUR"));
         }
       }
+      System.out.println("Pour plus de renseignements sur le gagnant contactez nous!");
     }catch (SQLException e){
       e.printStackTrace();
       throw new NullPointerException();
