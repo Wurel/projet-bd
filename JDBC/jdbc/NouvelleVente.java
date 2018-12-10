@@ -97,7 +97,7 @@ public class NouvelleVente{
         int nvCarac = nvSc.nextInt();
         // System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
         Statement caracte = con.createStatement();
-        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+", "+description+", "+idProduit+")");
+        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES('"+nomCaract+"','"+description+"', "+idProduit+")");
         if (nvCarac == 0) {
           ajouterCaract = false;
         }
