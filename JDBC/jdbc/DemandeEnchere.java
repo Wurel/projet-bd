@@ -98,17 +98,18 @@ public class DemandeEnchere{
             }
 
             if (nombreEncheres > 0) {
-                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE_PROPOSEE");
+                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE_PROPOSEE");
                 ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
-
-                while (cleMax.next()){
-                    clePrimaireEnchere = cleMax.getInt("cle") + 1;
-                }
+                cleMax.next();
+                clePrimaireEnchere = cleMax.getInt("MAX(num_enchere)") + 1;
+                // while (cleMax.next()){
+                //     clePrimaireEnchere = cleMax.getInt("cle") + 1;
+                // }
             }
 
+            System.out.println(clePrimaireEnchere);
             // On insère l'offre :
             PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (?, ?, ?, ?, ?) ");
-            // On insère les attributs dans le bon sens :
             enchere.setInt(1, clePrimaireEnchere);
             enchere.setInt(2, prixEnchere);
             enchere.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -116,7 +117,6 @@ public class DemandeEnchere{
             enchere.setInt(5, idVente);
 
             System.out.println("CHECKPOINT 1");
-            // System.out.println(enchere.toString());
             ResultSet resultat = enchere.executeQuery();
             System.out.println("CHECKPOINT 2");
 
@@ -130,7 +130,7 @@ public class DemandeEnchere{
             PreparedStatement commit = con.prepareStatement("COMMIT");
             commit.executeQuery();
 
-            System.out.println("Félicitation! Vous avez bien encherri sur cette vente.");
+            System.out.println("Felicitations! Vous avez bien encherri sur cette vente.");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException();
