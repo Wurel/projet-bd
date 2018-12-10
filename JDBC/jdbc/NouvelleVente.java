@@ -95,9 +95,9 @@ public class NouvelleVente{
         System.out.println("Voulez-vous ajouter d'autres caracteristiques?(oui=1/non=0)");
         while (!nvSc.hasNextInt()) nvSc.next();
         int nvCarac = nvSc.nextInt();
-        System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
-        // Statement caracte = con.createStatement();
-        // caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
+        // System.out.println("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+","+description+","+idProduit+")");
+        Statement caracte = con.createStatement();
+        caracte.executeUpdate("INSERT INTO CARACTERISTIQUE VALUES("+nomCaract+", "+description+", "+idProduit+")");
         if (nvCarac == 0) {
           ajouterCaract = false;
         }
