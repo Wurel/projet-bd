@@ -4,7 +4,7 @@ import java.sql.*;
 import oracle.jdbc.driver.*;
 import java.util.*;
 import java.text.*;
-
+import java.lang.Math.*;
 public class DemandeEnchere{
     private Connection con;
     private String emailAcheteur;
@@ -87,20 +87,6 @@ public class DemandeEnchere{
          *      - ajouter 1
          */
 
-         // Il nous faut la date et l'heure :
-         java.util.Date dateEtHeure = new java.util.Date();
-         // Il y a conflit entre java.util.Date et java.sql.Date
-         // Donc on met le nom complet.
-
-         // On donne la date :
-         SimpleDateFormat formatDate = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss:SS");
-         String date = formatDate.format(dateEtHeure);
-
-         // On donne l'heure :
-         // SimpleDateFormat formatHeure = new SimpleDateFormat ("HH:mm:ss:SSS");
-         // String heure = formatHeure.format(dateEtHeure);
-
-
         // On cherche les clés primaires dans les tables ENCHERE et ENCHERE_PROPOSEE :
         try {
             int clePrimaireEnchere = 1;
@@ -112,53 +98,39 @@ public class DemandeEnchere{
             }
 
             if (nombreEncheres > 0) {
-                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) AS cle FROM ENCHERE_PROPOSEE");
+                PreparedStatement clesPrimairesExistantesTableEnchere = con.prepareStatement("SELECT MAX(num_enchere) FROM ENCHERE_PROPOSEE");
                 ResultSet cleMax = clesPrimairesExistantesTableEnchere.executeQuery();
-
-                while (cleMax.next()){
-                    clePrimaireEnchere = cleMax.getInt("cle") + 1;
-                }
+                cleMax.next();
+                clePrimaireEnchere = cleMax.getInt("MAX(num_enchere)") + 1;
+                // while (cleMax.next()){
+                //     clePrimaireEnchere = cleMax.getInt("cle") + 1;
+                // }
             }
 
-            PreparedStatement clesPrimairesExistantesTableEnchereProposee = con.prepareStatement("SELECT MAX(num_enchere) AS cleproposee FROM ENCHERE_PROPOSEE");
-            ResultSet cleMaxProposee = clesPrimairesExistantesTableEnchereProposee.executeQuery();
-
-            int clePrimaireEnchereProposee = 0;
-            while (cleMaxProposee.next()) {
-                clePrimaireEnchereProposee = cleMaxProposee.getInt("cleproposee") + 1;
-            }
-        // } catch (SQLException e) {
-        //       e.printStackTrace();
-        //       throw new NullPointerException();
-        // }
-
-        // try{
+            System.out.println(clePrimaireEnchere);
             // On insère l'offre :
-            PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (=?, =?, =?, =?, =?) ");
-            // On insère les attributs dans le bon sens :
+            PreparedStatement enchere = con.prepareStatement("INSERT INTO ENCHERE VALUES (?, ?, ?, ?, ?) ");
             enchere.setInt(1, clePrimaireEnchere);
             enchere.setInt(2, prixEnchere);
-            enchere.setString(3, date);
+            enchere.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
             enchere.setInt(4, 1);
             enchere.setInt(5, idVente);
+
             System.out.println("CHECKPOINT 1");
-            System.out.println(enchere.toString());
             ResultSet resultat = enchere.executeQuery();
-            PreparedStatement commit = con.prepareStatement("COMMIT");
-            commit.executeQuery();
             System.out.println("CHECKPOINT 2");
 
-            PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (=?, =?, =?) ");
+            PreparedStatement enchereProposee = con.prepareStatement("INSERT INTO ENCHERE_PROPOSEE VALUES (?, ?, ?) ");
             // On insère les attributs dans le bon sens :
-            enchere.setInt(1, clePrimaireEnchereProposee);
-            enchere.setInt(2, idVente);
-            enchere.setString(3, emailAcheteur);
+            enchereProposee.setInt(1, clePrimaireEnchere);
+            enchereProposee.setInt(2, idVente);
+            enchereProposee.setString(3, emailAcheteur);
             ResultSet result = enchereProposee.executeQuery();
 
-            PreparedStatement autreCommit = con.prepareStatement("COMMIT");
-            autreCommit.executeQuery();
+            PreparedStatement commit = con.prepareStatement("COMMIT");
+            commit.executeQuery();
 
-            System.out.println("Félicitation! Vous avez bien encherri sur cette vente.");
+            System.out.println("Felicitations! Vous avez bien encherri sur cette vente.");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException();
@@ -203,6 +175,9 @@ public class DemandeEnchere{
                   throw new NullPointerException();
                 }
 
+                System.out.println("Le prix actuel de l'enchere est : ");
+                System.out.println(prixActuel);
+
                 String offre = "";
                 while (!enchereSuffisante){
                     while (!nombreCorrect) {
@@ -239,18 +214,32 @@ public class DemandeEnchere{
 
                 // On récupère le prix actuel :
                 int prixActuel = -1;
+                Timestamp dateVente = new Timestamp(System.currentTimeMillis());
                 try {
                     PreparedStatement prixEncheres = con.prepareStatement("SELECT prix_depart_vente FROM VENTE WHERE id_vente =? ");
                     prixEncheres.setInt(1, idVente);
                     ResultSet rs = prixEncheres.executeQuery();
-
                     while(rs.next()) {
                         prixActuel = rs.getInt("prix_depart_vente");
+                    }
+
+                    PreparedStatement dateMiseEnVente = con.prepareStatement("SELECT date_debut_vente FROM VENTE WHERE id_vente =? ");
+                    dateMiseEnVente.setInt(1, idVente);
+                    ResultSet res = dateMiseEnVente.executeQuery();
+
+                    while(res.next()) {
+                        dateVente = res.getTimestamp("date_debut_vente");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     throw new NullPointerException();
                 }
+
+                Timestamp dateActuelle = new Timestamp(System.currentTimeMillis());
+                long millisecondes = dateActuelle.getTime() - dateVente.getTime();
+                int minutes = (int) millisecondes / 60000;
+                prixActuel = Math.max(prixActuel - minutes, 0);
+
 
                 System.out.println("Le prix actuel est : ");
                 System.out.println(prixActuel);
