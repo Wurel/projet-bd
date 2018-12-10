@@ -4,7 +4,7 @@ import java.sql.*;
 import oracle.jdbc.driver.*;
 import java.util.*;
 import java.text.*;
-
+import java.lang.Math.*;
 public class DemandeEnchere{
     private Connection con;
     private String emailAcheteur;
@@ -214,18 +214,32 @@ public class DemandeEnchere{
 
                 // On récupère le prix actuel :
                 int prixActuel = -1;
+                Timestamp dateVente = new Timestamp(System.currentTimeMillis());
                 try {
                     PreparedStatement prixEncheres = con.prepareStatement("SELECT prix_depart_vente FROM VENTE WHERE id_vente =? ");
                     prixEncheres.setInt(1, idVente);
                     ResultSet rs = prixEncheres.executeQuery();
-
                     while(rs.next()) {
                         prixActuel = rs.getInt("prix_depart_vente");
+                    }
+
+                    PreparedStatement dateMiseEnVente = con.prepareStatement("SELECT date_debut_vente FROM VENTE WHERE id_vente =? ");
+                    dateMiseEnVente.setInt(1, idVente);
+                    ResultSet res = dateMiseEnVente.executeQuery();
+
+                    while(res.next()) {
+                        dateVente = res.getTimestamp("date_debut_vente");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     throw new NullPointerException();
                 }
+
+                Timestamp dateActuelle = new Timestamp(System.currentTimeMillis());
+                long millisecondes = dateActuelle.getTime() - dateVente.getTime();
+                int minutes = (int) millisecondes / 60000;
+                prixActuel = Math.max(prixActuel - minutes, 0);
+
 
                 System.out.println("Le prix actuel est : ");
                 System.out.println(prixActuel);
