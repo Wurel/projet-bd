@@ -148,9 +148,9 @@ public class NouvelleVente{
       //   vente.setString(7, "non_limitee");
       // }
 
-      System.out.println(idSalle);
-      System.out.println(idVente);
-      System.out.println(prixDepart);
+      // System.out.println(idSalle);
+      // System.out.println(idVente);
+      // System.out.println(prixDepart);
       vente.executeQuery("INSERT INTO VENTE (id_vente, prix_depart_vente, id_salle) VALUES ("+idVente+", "+prixDepart+", "+idSalle+")");
 
       PreparedStatement prodSoumisVente = con.prepareStatement("INSERT INTO PRODUIT_SOUMIS_A_LA_VENTE VALUES(?, ?, ?)");
