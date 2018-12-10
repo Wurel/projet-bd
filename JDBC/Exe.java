@@ -59,6 +59,12 @@ public class Exe {
             String reponseAutreSalle = sc.nextLine();
             entreeAutreSalle = reponseAutreSalle.equals("oui");
 
+            System.out.println("Voulez-vous savoir si vous etes parmi les gagnants potentiels (oui/non)");
+            reponse = sc.nextLine();
+            if (reponse.equals("oui")) {
+              new Gagnant(con);
+            }
+
         } while (entreeAutreSalle);
 
         System.out.println("Merci de votre visite !");
